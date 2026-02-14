@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2019-2020 The Bitcoin ABC developers
+# Copyright (c) 2019-2020 The Ergon ABC developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -334,7 +334,7 @@ class PhabWrapper(Phabricator):
 
         if len(project_data) != 1:
             self.logger.info(
-                f"Found {len(project_data)} project(s) while searching for Bitcoin ABC: '{project_data}'"
+                f"Found {len(project_data)} project(s) while searching for Ergon ABC: '{project_data}'"
             )
             return []
 

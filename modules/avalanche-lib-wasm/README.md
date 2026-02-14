@@ -18,7 +18,7 @@ This library provides a Rust implementation of eCash Avalanche proofs that compi
 
 ## Architecture
 
-This library is based on the C++ implementation in Bitcoin ABC (`src/avalanche/proofbuilder.h`) and provides:
+This library is based on the C++ implementation in Ergon ABC (`src/avalanche/proofbuilder.h`) and provides:
 
 - **Core Types**: `Hash256`, `OutPoint`, `Script`, `SchnorrSignature`
 - **Stake Types**: `Stake`, `SignedStake`, `StakeCommitment`
@@ -302,7 +302,7 @@ Common errors:
 
 This library is designed to integrate with:
 
-- **Bitcoin ABC nodes**: Generated proofs and delegations can be submitted via RPC
+- **Ergon ABC nodes**: Generated proofs and delegations can be submitted via RPC
 - **eCash wallets**: For proof creation, delegation management, and key rotation
 - **Web applications**: Via WebAssembly bindings for client-side operations
 - **Node.js services**: For server-side proof and delegation processing

@@ -193,7 +193,7 @@ class P2PConnection(asyncio.Protocol):
         self.peer_connect_helper(dstaddr, dstport, net, timeout_factor)
 
         loop = NetworkThread.network_event_loop
-        logger.debug(f"Connecting to Bitcoin ABC Node: {self.dstaddr}:{self.dstport}")
+        logger.debug(f"Connecting to Ergon ABC Node: {self.dstaddr}:{self.dstport}")
         coroutine = loop.create_connection(
             lambda: self, host=self.dstaddr, port=self.dstport
         )
@@ -204,7 +204,7 @@ class P2PConnection(asyncio.Protocol):
     ):
         self.peer_connect_helper("0", 0, net, timeout_factor)
 
-        logger.debug(f"Listening for Bitcoin ABC Node with id: {connect_id}")
+        logger.debug(f"Listening for Ergon ABC Node with id: {connect_id}")
         return lambda: NetworkThread.listen(self, connect_cb, idx=connect_id)
 
     def peer_disconnect(self):

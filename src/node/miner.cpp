@@ -162,14 +162,21 @@ BlockAssembler::CreateNewBlock(const CScript &scriptPubKeyIn) {
     m_last_block_num_txs = blockFitter.nBlockTx;
     m_last_block_size = blockFitter.nBlockSize;
 
+    // Fill in header fields needed for contextual reward calculation.
+    pblock->hashPrevBlock = pindexPrev->GetBlockHash();
+    UpdateTime(pblock, chainParams, pindexPrev,
+               TicksSinceEpoch<std::chrono::seconds>(GetAdjustedTime()));
+    pblock->nBits = GetNextWorkRequired(pindexPrev, pblock, chainParams);
+    pblock->nNonce = 0;
+
     // Create coinbase transaction.
     CMutableTransaction coinbaseTx;
     coinbaseTx.vin.resize(1);
     coinbaseTx.vin[0].prevout = COutPoint();
     coinbaseTx.vout.resize(1);
     coinbaseTx.vout[0].scriptPubKey = scriptPubKeyIn;
-    coinbaseTx.vout[0].nValue =
-        blockFitter.nFees + GetBlockSubsidy(nHeight, consensusParams);
+    coinbaseTx.vout[0].nValue = GetBlockReward(
+        pindexPrev, pblock->nBits, nHeight, consensusParams, blockFitter.nFees);
     coinbaseTx.vin[0].scriptSig = CScript() << nHeight << OP_0;
 
     const Amount blockReward = coinbaseTx.vout[0].nValue;
@@ -211,12 +218,7 @@ BlockAssembler::CreateNewBlock(const CScript &scriptPubKeyIn) {
         nSerializeSize, blockFitter.nBlockTx, blockFitter.nFees,
         blockFitter.nBlockSigChecks);
 
-    // Fill in header.
-    pblock->hashPrevBlock = pindexPrev->GetBlockHash();
-    UpdateTime(pblock, chainParams, pindexPrev,
-               TicksSinceEpoch<std::chrono::seconds>(GetAdjustedTime()));
-    pblock->nBits = GetNextWorkRequired(pindexPrev, pblock, chainParams);
-    pblock->nNonce = 0;
+    // Header was initialized before coinbase creation.
     pblocktemplate->entries[0].sigChecks = 0;
 
     BlockValidationState state;

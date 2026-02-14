@@ -1,6 +1,6 @@
-# Bitcoin ABC 0.22.10 Release Notes
+# Ergon ABC 0.22.10 Release Notes
 
-Bitcoin ABC version 0.22.10 is now available from:
+Ergon ABC version 0.22.10 is now available from:
 
   <https://download.bitcoinabc.org/0.22.10/>
 
@@ -37,4 +37,4 @@ protocol is now supported. To enable the feature, use the `-blockfilterindex` an
 Misc
 ----
 
-Building Bitcoin ABC for the BCHN network is no longer supported.
+Building Ergon ABC for the BCHN network is no longer supported.

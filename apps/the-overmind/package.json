@@ -16,7 +16,7 @@
         "XEC",
         "grammy"
     ],
-    "author": "Bitcoin ABC",
+    "author": "Ergon ABC",
     "license": "MIT",
     "dependencies": {
         "chronik-client": "file:../../modules/chronik-client",

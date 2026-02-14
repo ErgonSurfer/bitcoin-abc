@@ -1,11 +1,11 @@
 libsecp256k1
 ============
 
-![Dependencies: None](https://img.shields.io/badge/dependencies-none-success)
+[![Build Status](https://api.cirrus-ci.com/github/Bitcoin-ABC/secp256k1.svg?branch=master)](https://cirrus-ci.com/github/Bitcoin-ABC/secp256k1)
 
 Optimized C library for cryptographic operations on curve secp256k1.
 
-This library is used for consensus critical cryptographic operations on the eCash network. It is maintained within the Bitcoin ABC repository, and is mirrored as a separate repository for ease of reuse in other eCash projects. Developers who want to contribute may do so at [reviews.bitcoinabc.org](https://reviews.bitcoinabc.org/). Use at your own risk.
+This library is used for consensus critical cryptographic operations on the eCash network. It is maintained within the Ergon ABC repository, and is mirrored as a separate repository for ease of reuse in other eCash projects. Developers who want to contribute may do so at [reviews.bitcoinabc.org](https://reviews.bitcoinabc.org/). Use at your own risk.
 
 This library is intended to be the highest quality publicly available library for cryptography on the secp256k1 curve. However, the primary focus of its development has been for usage in the eCash system and usage unlike Bitcoin's may be less well tested, verified, or suffer from a less well thought out interface. Correct usage requires some care and consideration that the library is fit for your application's purpose.
 
@@ -18,7 +18,6 @@ Features:
 * Derandomized ECDSA (via RFC6979 or with a caller provided function.)
 * Very efficient implementation.
 * Suitable for embedded systems.
-* No runtime dependencies.
 * Optional module for public key recovery.
 * Optional module for ECDH key exchange.
 * Optional module for multiset hash (experimental).
@@ -88,18 +87,14 @@ ninja check-secp256k1
 sudo ninja install  # optional
 ```
 
-To compile optional modules (such as taproot Schnorr signatures), you need to run `./configure` with additional flags (such as `--enable-module-schnorrsig`). Run `./configure --help` to see the full list of available flags.
-
 Usage examples
 -----------
-Usage examples can be found in the [examples](examples) directory. To compile them you need to configure with `--enable-examples`.
-For experimental modules, you will also need `--enable-experimental` as well as a flag for each individual module, e.g. `--enable-module-multiset`.
-If using CMake, a `secp256k1-examples` ninja target is available to build all examples whose modules are enabled.
+  Usage examples can be found in the [examples](examples) directory. To compile them you need to configure with `--enable-examples`.
+  For experimental modules, you will also need `--enable-experimental` as well as a flag for each individual module, e.g. `--enable-module-multiset`.
+  If using CMake, a `secp256k1-examples` ninja target is available to build all examples whose modules are enabled.
   * [ECDSA example](examples/ecdsa.c)
-  * [Schnorr signatures (taproot) example](examples/schnorr.c)
-  * [Deriving a shared secret (ECDH) example](examples/ecdh.c)
-
-To compile the Schnorr signature and ECDH examples, you also need to configure with `--enable-module-schnorrsig` and `--enable-module-ecdh`.
+  * [Schnorr Signatures (taproot) example](examples/schnorr.c)
+  * [Deriving a shared secret(ECDH) example](examples/ecdh.c)
 
 Test coverage
 -----------

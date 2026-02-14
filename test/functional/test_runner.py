@@ -335,7 +335,7 @@ def main():
     parser.add_argument(
         "--testsuitename",
         "-n",
-        default="Bitcoin ABC functional tests",
+        default="Ergon ABC functional tests",
         help=(
             "Name of the test suite, as it will appear in the logs and in the JUnit"
             " report."

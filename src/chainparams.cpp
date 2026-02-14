@@ -42,6 +42,8 @@ std::unique_ptr<const CChainParams> CreateChainParams(const ArgsManager &args,
         case ChainType::REGTEST: {
             return CChainParams::RegTest(opts);
         }
+        case ChainType::ERGON:
+            return CChainParams::Ergon(opts);
     }
     throw std::invalid_argument(
         strprintf("%s: Invalid ChainType value", __func__));

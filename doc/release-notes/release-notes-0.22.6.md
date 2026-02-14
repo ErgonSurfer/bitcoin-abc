@@ -1,6 +1,6 @@
-# Bitcoin ABC 0.22.6 Release Notes
+# Ergon ABC 0.22.6 Release Notes
 
-Bitcoin ABC version 0.22.6 is now available from:
+Ergon ABC version 0.22.6 is now available from:
 
   <https://download.bitcoinabc.org/0.22.6/>
 
@@ -9,10 +9,10 @@ This release includes the following features and fixes:
 P2P and network changes
 -----------------------
 
-#### Removal of reject network messages from Bitcoin ABC (BIP61)
+#### Removal of reject network messages from Ergon ABC (BIP61)
 
 This is a follow-up on the removal of BIP61 REJECT message support in
-Bitcoin ABC version 0.22.5:
+Ergon ABC version 0.22.5:
 
 * Log messages that previously reported the REJECT code when a transaction was
   not accepted to the mempool now no longer report the REJECT code. The verbal

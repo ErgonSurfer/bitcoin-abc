@@ -169,6 +169,11 @@ void StartScriptCheckWorkerThreads(int threads_num);
 void StopScriptCheckWorkerThreads();
 
 Amount GetBlockSubsidy(int nHeight, const Consensus::Params &consensusParams);
+Amount GetBlockSubsidy(const CBlockIndex *pindexPrev, uint32_t nBits,
+                       int nHeight, const Consensus::Params &consensusParams);
+Amount GetBlockReward(const CBlockIndex *pindexPrev, uint32_t nBits,
+                      int nHeight, const Consensus::Params &consensusParams,
+                      Amount nFees);
 
 bool FatalError(kernel::Notifications &notifications,
                 BlockValidationState &state, const std::string &strMessage,

@@ -194,7 +194,7 @@ impl SubRecv {
 
     async fn schedule_ping(ws_ping_interval: Duration) -> Result<WsAction> {
         tokio::time::sleep(ws_ping_interval).await;
-        let ping_payload = b"Bitcoin ABC Chronik Indexer".to_vec();
+        let ping_payload = b"Ergon ABC Chronik Indexer".to_vec();
         Ok(WsAction::Message(ws::Message::Ping(ping_payload)))
     }
 

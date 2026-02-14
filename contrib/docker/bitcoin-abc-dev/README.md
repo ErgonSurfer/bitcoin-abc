@@ -1,4 +1,4 @@
-# Building Bitcoin ABC inside a Docker container
+# Building Ergon ABC inside a Docker container
 
 ## Building your Docker image
 

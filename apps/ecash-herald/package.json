@@ -21,7 +21,7 @@
         "bot",
         "crypto"
     ],
-    "author": "Bitcoin ABC",
+    "author": "Ergon ABC",
     "license": "MIT",
     "dependencies": {
         "axios": "^1.3.4",

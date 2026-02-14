@@ -2,7 +2,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-//! Lints for Bitcoin ABC Rust code.
+//! Lints for Ergon ABC Rust code.
 
 /// Adds common lints to the items in this macro.
 ///

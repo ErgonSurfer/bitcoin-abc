@@ -955,9 +955,9 @@ class TestNode:
         # unexpected intermittent errors less likely.
         p2p_conn.sync_with_ping()
 
-        # Consistency check that the Bitcoin ABC has received our user agent
+        # Consistency check that the Ergon ABC has received our user agent
         # string. This checks the node's newest peer. It could be racy if
-        # another Bitcoin ABC node has connected since we opened our
+        # another Ergon ABC node has connected since we opened our
         # connection, but we don't expect that to happen.
         assert_equal(self.getpeerinfo()[-1]["subver"], P2P_SUBVERSION)
 

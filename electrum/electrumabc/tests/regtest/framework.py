@@ -51,7 +51,7 @@ from test_framework.util import (  # noqa: E402
 
 
 class ElectrumABCTestCase(unittest.TestCase):
-    """Test case with an Electrum server provided by a Bitcoin ABC node and with
+    """Test case with an Electrum server provided by a Ergon ABC node and with
     an Electrum ABC daemon running.
     """
 

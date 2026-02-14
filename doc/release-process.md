@@ -1,4 +1,4 @@
-Bitcoin ABC Release Process
+Ergon ABC Release Process
 ===========================
 
 

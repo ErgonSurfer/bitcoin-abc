@@ -99,7 +99,7 @@ class FeatureIndexPruneTest(BitcoinTestFramework):
                 # the prune heights used here and below are magic numbers that are determined by the
                 # thresholds at which block files wrap, so they depend on disk serialization and default block file size.
                 # The difference in number of blocks per block file between
-                # Bitcoin ABC and Bitcoin Core is caused by additional witness
+                # Ergon ABC and Bitcoin Core is caused by additional witness
                 # data in coinbase transactions for core.
                 assert_equal(pruneheight_new, 345)
 

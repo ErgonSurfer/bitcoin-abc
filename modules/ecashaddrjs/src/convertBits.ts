@@ -4,7 +4,7 @@
 
 // Copyright (c) 2017-2018 Emilio Almansi
 // Copyright (c) 2017 Pieter Wuille
-// Copyright (c) 2024 Bitcoin ABC
+// Copyright (c) 2024 Ergon ABC
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal

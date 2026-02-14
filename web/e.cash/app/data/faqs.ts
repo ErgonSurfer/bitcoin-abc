@@ -57,7 +57,7 @@ export const faqs: FAQ[] = [
   {
     question: "Is eCash using the Avalanche blockchain?",
     answer:
-      'No, eCash is its own blockchain.\nIt is important to differentiate the Avalanche protocol, from the cryptocurrency project known as "Avalanche" or "AVAX".\neCash\'s Avalanche implementation is completely separate and distinct from the Avalanche (AVAX) project. They have no connection, other than both using the protocol described in the [Avalanche whitepaper](https://ipfs.io/ipfs/QmUy4jh5mGNZvLkjies1RWM4YuvJh5o2FYopNPVYwrRVGV). Avalanche on eCash is an entirely new implementation which was developed from scratch by the Bitcoin ABC team. This is important as it puts eCash in a technology leadership role, rather than having to rely on the innovation of others.',
+      'No, eCash is its own blockchain.\nIt is important to differentiate the Avalanche protocol, from the cryptocurrency project known as "Avalanche" or "AVAX".\neCash\'s Avalanche implementation is completely separate and distinct from the Avalanche (AVAX) project. They have no connection, other than both using the protocol described in the [Avalanche whitepaper](https://ipfs.io/ipfs/QmUy4jh5mGNZvLkjies1RWM4YuvJh5o2FYopNPVYwrRVGV). Avalanche on eCash is an entirely new implementation which was developed from scratch by the Ergon ABC team. This is important as it puts eCash in a technology leadership role, rather than having to rely on the innovation of others.',
   },
   {
     question: "Where did eCash come from?",
@@ -65,9 +65,9 @@ export const faqs: FAQ[] = [
       "On November 15, 2020, the Bitcoin Cash (BCH) blockchain split into two chains. One of those chains was called BCHA for a time. This chain was what eventually became eCash.",
   },
   {
-    question: "What's the difference between eCash and Bitcoin ABC?",
+    question: "What's the difference between eCash and Ergon ABC?",
     answer:
-      "eCash is a cryptocurrency, whereas Bitcoin ABC is the software businesses use to interact with and maintain the eCash network. The team behind the Bitcoin ABC software also operates under the same name.\n\nYou can learn more about Bitcoin ABC at [bitcoinabc.org](https://www.bitcoinabc.org/).",
+      "eCash is a cryptocurrency, whereas Ergon ABC is the software businesses use to interact with and maintain the eCash network. The team behind the Ergon ABC software also operates under the same name.\n\nYou can learn more about Ergon ABC at [bitcoinabc.org](https://www.bitcoinabc.org/).",
   },
   {
     question: "Why is eCash listed as BCHA on some exchanges?",

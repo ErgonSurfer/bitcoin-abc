@@ -16,6 +16,8 @@ std::string ChainTypeToString(ChainType chain) {
             return "test";
         case ChainType::REGTEST:
             return "regtest";
+        case ChainType::ERGON:
+            return "ergon";
     }
     assert(false);
 }
@@ -27,6 +29,8 @@ std::optional<ChainType> ChainTypeFromString(std::string_view chain) {
         return ChainType::TESTNET;
     } else if (chain == "regtest") {
         return ChainType::REGTEST;
+    } else if (chain == "ergon") {
+        return ChainType::ERGON;
     } else {
         return std::nullopt;
     }

@@ -515,7 +515,7 @@ describe('<Token /> available actions rendered', () => {
         // We can mint an NFT if we give it a name and a ticker
         await userEvent.type(
             await screen.findByPlaceholderText('Enter a name for your NFT'),
-            'Bitcoin ABC',
+            'Ergon ABC',
         );
 
         // The mint button is disabled as the user has not entered a ticker
@@ -665,7 +665,7 @@ describe('<Token /> available actions rendered', () => {
         // We can mint an NFT if we give it a name and a ticker
         await userEvent.type(
             await screen.findByPlaceholderText('Enter a name for your NFT'),
-            'Bitcoin ABC',
+            'Ergon ABC',
         );
 
         // The mint button is disabled as the user has not entered a ticker

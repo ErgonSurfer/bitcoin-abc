@@ -1,6 +1,6 @@
-# User-space, Statically Defined Tracing (USDT) for Bitcoin ABC
+# User-space, Statically Defined Tracing (USDT) for Ergon ABC
 
-Bitcoin ABC includes statically defined tracepoints to allow for more
+Ergon ABC includes statically defined tracepoints to allow for more
 observability during development, debugging, code review, and production usage.
 These tracepoints make it possible to keep track of custom statistics and
 enable detailed monitoring of otherwise hidden internals. They have
@@ -112,7 +112,7 @@ Arguments passed:
 
 The following tracepoints cover the in-memory UTXO cache. UTXOs are, for example,
 added to and removed (spent) from the cache when we connect a new block.
-**Note**: Bitcoin ABC uses temporary clones of the _main_ UTXO cache
+**Note**: Ergon ABC uses temporary clones of the _main_ UTXO cache
 (`chainstate.CoinsTip()`). For example, the RPCs `generateblock` and
 `getblocktemplate` call `TestBlockValidity()`, which applies the UTXO set
 changes to a temporary cache. Similarly, mempool consistency checks, which are
@@ -168,7 +168,7 @@ Arguments passed:
 4. Value of the coin as `pointer to unsigned chars` (e.g. "123456.78 XEC")
 5. If the coin is a coinbase as `bool`
 
-## Adding tracepoints to Bitcoin ABC
+## Adding tracepoints to Ergon ABC
 
 To add a new tracepoint, `#include <util/trace.h>` in the compilation unit where
 the tracepoint is inserted. Use one of the `TRACEx` macros listed below
@@ -268,7 +268,7 @@ USDT support.
 
 ### GDB - GNU Project Debugger
 
-To list probes in Bitcoin ABC, use `info probes` in `gdb`:
+To list probes in Ergon ABC, use `info probes` in `gdb`:
 
 ```
 $ gdb ./src/bitcoind
@@ -283,7 +283,7 @@ stap validation block_connected  0x00000000002fb10c /src/bitcoind
 
 ### With `readelf`
 
-The `readelf` tool can be used to display the USDT tracepoints in Bitcoin ABC.
+The `readelf` tool can be used to display the USDT tracepoints in Ergon ABC.
 Look for the notes with the description `NT_STAPSDT`.
 
 ```

@@ -73,7 +73,7 @@ def bits_to_work(bits):
 
 def _get_little_endian_num_bits(b: bytes) -> int:
     """Returns 1 + the position of the highest bit that is set in bytes b
-    or 0 if the bytes object is all 0's. Like Bitcoin ABC's arith_uint256::bits()
+    or 0 if the bytes object is all 0's. Like Ergon ABC's arith_uint256::bits()
     """
     width = len(b)
     for pos in range(width - 1, -1, -1):
@@ -86,7 +86,7 @@ def _get_little_endian_num_bits(b: bytes) -> int:
 
 
 def _get_little_endian_low64(b: bytes) -> int:
-    """Like Bitcoin ABC's arith_uint256::GetLow64()"""
+    """Like Ergon ABC's arith_uint256::GetLow64()"""
     assert len(b) >= 8
     return (
         int.from_bytes(b[:8], byteorder="little", signed=False)
@@ -95,7 +95,7 @@ def _get_little_endian_low64(b: bytes) -> int:
 
 
 def target_to_bits(target: int) -> int:
-    # arith_uint256::GetCompact in Bitcoin ABC
+    # arith_uint256::GetCompact in Ergon ABC
     if not (0 <= target < (1 << 256)):
         raise Exception(f"target should be uint256. got {target!r}")
     b = target.to_bytes(length=32, byteorder="little", signed=False)
@@ -120,7 +120,7 @@ def target_to_bits(target: int) -> int:
 
 
 def bits_to_target(ncompact: int) -> int:
-    # arith_uint256::SetCompact in Bitcoin ABC
+    # arith_uint256::SetCompact in Ergon ABC
     if not (0 <= ncompact < (1 << 32)):
         raise Exception(f"ncompact should be uint32. got {ncompact!r}")
     nsize = ncompact >> 24

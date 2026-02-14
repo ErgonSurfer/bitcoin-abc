@@ -8,14 +8,20 @@
 
 #include <common/args.h>
 #include <currencyunit.h>
+#include <util/chaintype.h>
 #include <univalue.h>
 
 #include <tinyformat.h>
 
 static const Currency BCHA{COIN, SATOSHI, 8, "BCHA"};
 static const Currency XEC{100 * SATOSHI, SATOSHI, 2, "XEC"};
+static const Currency XRG{COIN, SATOSHI, 8, "XRG"};
 
 const Currency &Currency::get() {
+    // Ergon always uses XRG units (1 XRG = 100,000,000 sat).
+    if (gArgs.GetChainType() == ChainType::ERGON) {
+        return XRG;
+    }
     return gArgs.GetBoolArg("-ecash", DEFAULT_ECASH) ? XEC : BCHA;
 }
 

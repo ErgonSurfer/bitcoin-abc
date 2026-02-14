@@ -335,7 +335,7 @@ mkdir -p "$DISTSRC"
 (
     cd "$DISTSRC"
 
-    # Setup the directory where our Bitcoin ABC build for HOST will be
+    # Setup the directory where our Ergon ABC build for HOST will be
     # installed. This directory will also later serve as the input for our
     # binary tarballs.
     INSTALLPATH=$(pwd)/installed/${DISTNAME}
@@ -384,7 +384,7 @@ EOF
         exit 1
     fi
 
-    # Build Bitcoin ABC
+    # Build Ergon ABC
     ninja
     ninja security-check
     ninja symbol-check

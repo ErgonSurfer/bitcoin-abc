@@ -1598,7 +1598,7 @@
         <translation>اجرا در پشت زمینه به‌صورت یک سرویس و پذیرش دستورات</translation>
     </message>
     <message>
-        <source>Bitcoin ABC</source>
+        <source>Ergon ABC</source>
         <translation> ABC Bitcoin </translation>
     </message>
     <message>

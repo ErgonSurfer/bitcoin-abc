@@ -131,6 +131,7 @@ export function decodeCashAddress(address: string): DecodedAddress {
  */
 export const VALID_PREFIXES = [
     'ecash',
+    'ergon',
     'bitcoincash',
     'simpleledger',
     'etoken',

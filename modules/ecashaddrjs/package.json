@@ -30,7 +30,7 @@
         "node",
         "browser"
     ],
-    "author": "Bitcoin ABC, Emilio Almansi",
+    "author": "Ergon ABC, Emilio Almansi",
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/Bitcoin-ABC/bitcoin-abc/issues"

@@ -1,6 +1,6 @@
-# Bitcoin ABC 0.28.6 Release Notes
+# Ergon ABC 0.28.6 Release Notes
 
-Bitcoin ABC version 0.28.6 is now available from:
+Ergon ABC version 0.28.6 is now available from:
 
   <https://download.bitcoinabc.org/0.28.6/>
 

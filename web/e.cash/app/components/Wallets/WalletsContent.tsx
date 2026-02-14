@@ -86,7 +86,7 @@ const wallets = [
   },
   {
     name: "Trezor",
-    text: "Trezor is a leading multi-crypto hardware wallet that supports eCash (XEC) in combination with Electrum ABC. Users can also sign Avalanche stake-proofs using custom firmware provided by Bitcoin ABC on Trezor Safe 3, Safe 5, and Model T.",
+    text: "Trezor is a leading multi-crypto hardware wallet that supports eCash (XEC) in combination with Electrum ABC. Users can also sign Avalanche stake-proofs using custom firmware provided by Ergon ABC on Trezor Safe 3, Safe 5, and Model T.",
     image: "/trezor.png",
     link: "https://trezor.io",
     availableOn: ["Hardware Wallet"],

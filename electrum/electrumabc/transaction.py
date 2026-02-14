@@ -72,7 +72,7 @@ Change < dust threshold is added to the tx fee.
 The unit is satoshis.
 """
 
-# Maximum script length in bytes (see Bitcoin ABC's script.h)
+# Maximum script length in bytes (see Ergon ABC's script.h)
 MAX_SCRIPT_SIZE = 10000
 
 AMOUNT_NBYTES = 8

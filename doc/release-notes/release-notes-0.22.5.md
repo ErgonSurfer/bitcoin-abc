@@ -1,6 +1,6 @@
-# Bitcoin ABC 0.22.5 Release Notes
+# Ergon ABC 0.22.5 Release Notes
 
-Bitcoin ABC version 0.22.5 is now available from:
+Ergon ABC version 0.22.5 is now available from:
 
   <https://download.bitcoinabc.org/0.22.5/>
 
@@ -36,18 +36,18 @@ Updated settings
 P2P and network changes
 -----------------------
 
-#### Removal of reject network messages from Bitcoin ABC (BIP61)
+#### Removal of reject network messages from Ergon ABC (BIP61)
 
 The command line option to enable BIP61 (`-enablebip61`) has been removed.
 
-This feature has been disabled by default since Bitcoin ABC version 0.21.9.
+This feature has been disabled by default since Ergon ABC version 0.21.9.
 Nodes on the network can not generally be trusted to send valid ("reject")
 messages, so this should only ever be used when connected to a trusted node.
 Please use the recommended alternatives if you rely on this deprecated feature:
 
 * Testing or debugging of implementations of the Bitcoin P2P network protocol
   should be done by inspecting the log messages that are produced by a recent
-  version of Bitcoin ABC. Bitcoin ABC logs debug messages
+  version of Ergon ABC. Ergon ABC logs debug messages
   (`-debug=<category>`) to a stream (`-printtoconsole`) or to a file
   (`-debuglogfile=<debug.log>`).
 

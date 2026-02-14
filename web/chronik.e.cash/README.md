@@ -6,7 +6,7 @@ This website is built using [Docusaurus](https://docusaurus.io/), a modern stati
 
 # Development
 
-The latest version of Bitcoin ABC is needed to generate appropriate download links. Docusaurus gets this information from the file `.abclatestversion`.
+The latest version of Ergon ABC is needed to generate appropriate download links. Docusaurus gets this information from the file `.abclatestversion`.
 
 In order to run docusaurus locally, you will need this file in place.
 

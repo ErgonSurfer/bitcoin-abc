@@ -58,10 +58,10 @@ export default function UpgradeContent({
           >
             <PlusHeader text="Who needs to upgrade?" />
             <p>
-              All operators of a Bitcoin ABC full node must upgrade to the
+              All operators of a Ergon ABC full node must upgrade to the
               latest major version {latestMajor} (current latest version is{" "}
               {latestVersion}). This includes node operators, Avalanche staking
-              nodes, Miners and Exchanges. This is available at the Bitcoin ABC{" "}
+              nodes, Miners and Exchanges. This is available at the Ergon ABC{" "}
               <Link
                 href="https://bitcoinabc.org/releases/"
                 target="_blank"
@@ -303,7 +303,7 @@ export default function UpgradeContent({
                       rel="noopener noreferrer"
                       className="text-blue-400 transition-colors hover:text-blue-300"
                     >
-                      Bitcoin ABC releases page
+                      Ergon ABC releases page
                     </Link>{" "}
                     for the latest version information
                   </span>

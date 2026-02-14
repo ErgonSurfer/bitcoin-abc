@@ -3066,8 +3066,8 @@
         <translation>HTTP sunucusu başlatılamadı. Ayrıntılar için debug.log dosyasına bakınız.</translation>
     </message>
     <message>
-        <source>Bitcoin ABC</source>
-        <translation>Bitcoin ABC</translation>
+        <source>Ergon ABC</source>
+        <translation>Ergon ABC</translation>
     </message>
     <message>
         <source>The %s developers</source>

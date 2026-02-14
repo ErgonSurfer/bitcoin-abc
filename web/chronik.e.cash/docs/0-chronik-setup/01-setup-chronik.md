@@ -17,7 +17,7 @@ You can already get started by using one of our pre-synced instances:
 
 ## Getting started
 
-Make sure you downloaded Bitcoin ABC Chronik in the [previous step](/chronik-setup/download). In there, you will find an executable `bitcoind`.
+Make sure you downloaded Ergon ABC Chronik in the [previous step](/chronik-setup/download). In there, you will find an executable `bitcoind`.
 
 To enable Chronik, simply pass `-chronik` as CLI argument:
 
@@ -111,7 +111,7 @@ Since the official release of Chronik, database upgrades for newer versions will
 
 ### `-chronikperfstats`
 
-If you want to help Bitcoin ABC optimizing Chronik, you can provide this flag when resyncing the node. It collects some performance statistics in the `<datadir>/perf` folder, which will help us with development.
+If you want to help Ergon ABC optimizing Chronik, you can provide this flag when resyncing the node. It collects some performance statistics in the `<datadir>/perf` folder, which will help us with development.
 
 ```conf title="bitcoin.conf"
 chronik=1

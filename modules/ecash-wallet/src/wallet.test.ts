@@ -37,6 +37,7 @@ import {
     ChronikClient,
     Token,
     TokenType,
+    ScriptUtxo,
     Tx as ChronikTx,
     TokenStatus,
 } from 'chronik-client';
@@ -58,8 +59,6 @@ import {
     batchTokenSendOutputs,
     checkTokenSendExceedsMaxOutputs,
     RequiredTokenInputs,
-    getTokenUtxosWithExactAtoms,
-    WalletUtxo,
 } from './wallet';
 import { WalletBase } from './walletBase';
 import { GENESIS_TOKEN_ID_PLACEHOLDER } from 'ecash-lib/dist/payment';
@@ -81,13 +80,12 @@ const DUMMY_OUTPOINT: OutPoint = {
     txid: DUMMMY_TXID,
     outIdx: 0,
 };
-const DUMMY_UTXO: WalletUtxo = {
+const DUMMY_UTXO: ScriptUtxo = {
     outpoint: DUMMY_OUTPOINT,
     blockHeight: DUMMY_TIPHEIGHT,
     isCoinbase: false,
     sats: 546n,
     isFinal: true,
-    address: DUMMY_ADDRESS,
 };
 
 /**
@@ -95,7 +93,7 @@ const DUMMY_UTXO: WalletUtxo = {
  * Coinbase utxos require COINBASE_MATURITY
  * confirmations to become spendable
  */
-const DUMMY_UNSPENDABLE_COINBASE_UTXO: WalletUtxo = {
+const DUMMY_UNSPENDABLE_COINBASE_UTXO: ScriptUtxo = {
     ...DUMMY_UTXO,
     outpoint: { ...DUMMY_OUTPOINT, outIdx: 1 },
     isCoinbase: true,
@@ -105,7 +103,7 @@ const DUMMY_UNSPENDABLE_COINBASE_UTXO: WalletUtxo = {
 /**
  * A coinbase utxo with (just) enough confirmations to be spendable
  */
-const DUMMY_SPENDABLE_COINBASE_UTXO: WalletUtxo = {
+const DUMMY_SPENDABLE_COINBASE_UTXO: ScriptUtxo = {
     ...DUMMY_UNSPENDABLE_COINBASE_UTXO,
     outpoint: { ...DUMMY_OUTPOINT, outIdx: 2 },
     blockHeight: DUMMY_TIPHEIGHT - COINBASE_MATURITY,
@@ -122,12 +120,12 @@ const DUMMY_TOKEN_ALP_TOKEN_TYPE_STANDARD: Token = {
     atoms: ALP_TOKEN_TYPE_STANDARD_ATOMS,
     isMintBaton: false,
 };
-const DUMMY_TOKEN_UTXO_ALP_TOKEN_TYPE_STANDARD: WalletUtxo = {
+const DUMMY_TOKEN_UTXO_ALP_TOKEN_TYPE_STANDARD: ScriptUtxo = {
     ...DUMMY_UTXO,
     outpoint: { ...DUMMY_OUTPOINT, outIdx: 3 },
     token: DUMMY_TOKEN_ALP_TOKEN_TYPE_STANDARD,
 };
-const DUMMY_TOKEN_UTXO_ALP_TOKEN_TYPE_STANDARD_MINTBATON: WalletUtxo = {
+const DUMMY_TOKEN_UTXO_ALP_TOKEN_TYPE_STANDARD_MINTBATON: ScriptUtxo = {
     ...DUMMY_TOKEN_UTXO_ALP_TOKEN_TYPE_STANDARD,
     outpoint: { ...DUMMY_OUTPOINT, outIdx: 4 },
     token: {
@@ -159,7 +157,7 @@ const DUMMY_TOKEN_SLP_TOKEN_TYPE_FUNGIBLE: Token = {
     atoms: SLP_TOKEN_TYPE_FUNGIBLE_ATOMS,
     isMintBaton: false,
 };
-const DUMMY_TOKEN_UTXO_SLP_TOKEN_TYPE_FUNGIBLE: WalletUtxo = {
+const DUMMY_TOKEN_UTXO_SLP_TOKEN_TYPE_FUNGIBLE: ScriptUtxo = {
     ...DUMMY_UTXO,
     outpoint: { ...DUMMY_OUTPOINT, outIdx: 5 },
     token: DUMMY_TOKEN_SLP_TOKEN_TYPE_FUNGIBLE,
@@ -187,12 +185,12 @@ const DUMMY_TOKEN_SLP_TOKEN_TYPE_NFT1_GROUP: Token = {
     atoms: SLP_TOKEN_TYPE_NFT1_GROUP_ATOMS,
     isMintBaton: false,
 };
-const DUMMY_TOKEN_UTXO_SLP_TOKEN_TYPE_NFT1_GROUP: WalletUtxo = {
+const DUMMY_TOKEN_UTXO_SLP_TOKEN_TYPE_NFT1_GROUP: ScriptUtxo = {
     ...DUMMY_UTXO,
     outpoint: { ...DUMMY_OUTPOINT, outIdx: 6 },
     token: DUMMY_TOKEN_SLP_TOKEN_TYPE_NFT1_GROUP,
 };
-const DUMMY_TOKEN_UTXO_SLP_TOKEN_TYPE_NFT1_GROUP_MINTBATON: WalletUtxo = {
+const DUMMY_TOKEN_UTXO_SLP_TOKEN_TYPE_NFT1_GROUP_MINTBATON: ScriptUtxo = {
     ...DUMMY_TOKEN_UTXO_SLP_TOKEN_TYPE_NFT1_GROUP,
     outpoint: { ...DUMMY_OUTPOINT, outIdx: 7 },
     token: {
@@ -214,20 +212,20 @@ const DUMMY_TOKEN_SLP_TOKEN_TYPE_MINT_VAULT: Token = {
     atoms: SLP_TOKEN_TYPE_MINT_VAULT_ATOMS,
     isMintBaton: false,
 };
-const DUMMY_TOKEN_UTXO_SLP_TOKEN_TYPE_MINT_VAULT: WalletUtxo = {
+const DUMMY_TOKEN_UTXO_SLP_TOKEN_TYPE_MINT_VAULT: ScriptUtxo = {
     ...DUMMY_UTXO,
     outpoint: { ...DUMMY_OUTPOINT, outIdx: 5 },
     token: DUMMY_TOKEN_SLP_TOKEN_TYPE_MINT_VAULT,
 };
 
-const DUMMY_SPENDABLE_COINBASE_UTXO_TOKEN: WalletUtxo = {
+const DUMMY_SPENDABLE_COINBASE_UTXO_TOKEN: ScriptUtxo = {
     ...DUMMY_SPENDABLE_COINBASE_UTXO,
     outpoint: { ...DUMMY_OUTPOINT, outIdx: 5 },
     token: DUMMY_TOKEN_ALP_TOKEN_TYPE_STANDARD,
 };
 
 // Utxo set used in testing to show all utxo types supported by ecash-wallet
-const ALL_SUPPORTED_UTXOS: WalletUtxo[] = [
+const ALL_SUPPORTED_UTXOS: ScriptUtxo[] = [
     DUMMY_UTXO,
     DUMMY_UNSPENDABLE_COINBASE_UTXO,
     DUMMY_SPENDABLE_COINBASE_UTXO,
@@ -317,8 +315,8 @@ describe('wallet.ts', () => {
 
         // We can get spendableSatsOnlyUtxos, which include spendable coinbase utxos
         expect(testWallet.spendableSatsOnlyUtxos()).to.deep.equal([
-            DUMMY_UTXO,
-            DUMMY_SPENDABLE_COINBASE_UTXO,
+            { ...DUMMY_UTXO, address: DUMMY_ADDRESS },
+            { ...DUMMY_SPENDABLE_COINBASE_UTXO, address: DUMMY_ADDRESS },
         ]);
 
         // We can get balanceSats (sum of all sats-only UTXOs, including immature coinbase)
@@ -333,7 +331,10 @@ describe('wallet.ts', () => {
         // Now we have utxos (all should have address field)
         expect(testWallet.utxos.length).to.equal(ALL_SUPPORTED_UTXOS.length);
         testWallet.utxos.forEach((utxo, i) => {
-            expect(utxo).to.deep.equal(ALL_SUPPORTED_UTXOS[i]);
+            expect(utxo).to.deep.equal({
+                ...ALL_SUPPORTED_UTXOS[i],
+                address: DUMMY_ADDRESS,
+            });
         });
 
         // We can get the size of a tx without broadcasting it
@@ -1311,7 +1312,7 @@ describe('Support functions', () => {
             const action = {
                 outputs: [{ sats: 1_000n, script: MOCK_DESTINATION_SCRIPT }],
             };
-            const spendableUtxos: WalletUtxo[] = [];
+            const spendableUtxos: ScriptUtxo[] = [];
             expect(selectUtxos(action, spendableUtxos)).to.deep.equal({
                 success: false,
                 missingSats: 1000n,
@@ -1326,7 +1327,7 @@ describe('Support functions', () => {
             const action = {
                 outputs: [{ sats: 1_000n, script: MOCK_DESTINATION_SCRIPT }],
             };
-            const spendableUtxos: WalletUtxo[] = [];
+            const spendableUtxos: ScriptUtxo[] = [];
             expect(
                 selectUtxos(action, spendableUtxos, {
                     satsStrategy: SatsSelectionStrategy.NO_SATS,
@@ -1539,13 +1540,9 @@ describe('Support functions', () => {
                 requiredUtxos,
             };
             // We require all of the utxos
-            const spendableUtxos: WalletUtxo[] = [];
+            const spendableUtxos = [];
             for (const outpoint of requiredUtxos) {
-                spendableUtxos.push({
-                    ...DUMMY_UTXO,
-                    sats: 750n,
-                    outpoint,
-                });
+                spendableUtxos.push({ ...DUMMY_UTXO, sats: 750n, outpoint });
             }
             expect(selectUtxos(action, spendableUtxos)).to.deep.equal({
                 success: true,
@@ -1908,13 +1905,10 @@ describe('Support functions', () => {
                 {
                     ...DUMMY_TOKEN_UTXO_ALP_TOKEN_TYPE_STANDARD_MINTBATON,
                     token: {
-                        ...DUMMY_TOKEN_UTXO_ALP_TOKEN_TYPE_STANDARD_MINTBATON.token!,
+                        ...DUMMY_TOKEN_UTXO_ALP_TOKEN_TYPE_STANDARD_MINTBATON.token,
                         tokenId: tokenIdToMint,
-                        tokenType: ALP_TOKEN_TYPE_STANDARD,
-                        atoms: 0n,
-                        isMintBaton: true,
                     },
-                },
+                } as ScriptUtxo,
                 // Sufficient utxos for token alpha
                 getDummyAlpUtxo(1000n, tokenToSendAlpha),
                 // Sufficient utxos for token beta
@@ -1986,13 +1980,10 @@ describe('Support functions', () => {
                 {
                     ...DUMMY_TOKEN_UTXO_ALP_TOKEN_TYPE_STANDARD_MINTBATON,
                     token: {
-                        ...DUMMY_TOKEN_UTXO_ALP_TOKEN_TYPE_STANDARD_MINTBATON.token!,
+                        ...DUMMY_TOKEN_UTXO_ALP_TOKEN_TYPE_STANDARD_MINTBATON.token,
                         tokenId: tokenIdToMint,
-                        tokenType: ALP_TOKEN_TYPE_STANDARD,
-                        atoms: 0n,
-                        isMintBaton: true,
                     },
-                },
+                } as ScriptUtxo,
                 // Sufficient utxos for token alpha
                 getDummyAlpUtxo(1000n, tokenToSendAlpha),
                 // Sufficient utxos for token beta
@@ -2828,7 +2819,7 @@ describe('Support functions', () => {
     context('getNftChildGenesisInput', () => {
         it('Returns exactly 1 input when qty-1 input exists', () => {
             const tokenId = '11'.repeat(32);
-            const spendableUtxos: WalletUtxo[] = [
+            const spendableUtxos = [
                 { ...DUMMY_UTXO, sats: 1000n },
                 {
                     ...DUMMY_UTXO,
@@ -2858,7 +2849,7 @@ describe('Support functions', () => {
 
         it('Returns highest qty input when no qty-1 input exists', () => {
             const tokenId = '22'.repeat(32);
-            const spendableUtxos: WalletUtxo[] = [
+            const spendableUtxos = [
                 { ...DUMMY_UTXO, sats: 1000n },
                 {
                     ...DUMMY_UTXO,
@@ -2888,7 +2879,7 @@ describe('Support functions', () => {
 
         it('Returns undefined when no matching inputs exist', () => {
             const tokenId = '33'.repeat(32);
-            const spendableUtxos: WalletUtxo[] = [
+            const spendableUtxos = [
                 { ...DUMMY_UTXO, sats: 1000n },
                 {
                     ...DUMMY_UTXO,
@@ -2908,7 +2899,7 @@ describe('Support functions', () => {
 
         it('Prefers qty-1 input over higher quantity inputs', () => {
             const tokenId = '55'.repeat(32);
-            const spendableUtxos: WalletUtxo[] = [
+            const spendableUtxos = [
                 { ...DUMMY_UTXO, sats: 1000n },
                 {
                     ...DUMMY_UTXO,
@@ -6374,57 +6365,6 @@ describe('Support functions', () => {
             });
         });
     });
-    context('getTokenUtxosWithExactAtoms', () => {
-        it('Returns hasExact: false when DP limit is hit despite an exact match existing', () => {
-            // Build a UTXO set where an exact match exists (100000 + 50000 = 150000) but the DP
-            // hits the entry limit before finding it. First 17 UTXOs are powers of 2, which cause
-            // the DP map to grow to 2^17 = 131072 entries (> 100k limit) before we process the
-            // 18th UTXO. The exact match requires the 18th (100000) and 19th (50000) UTXOs.
-            const tokenId = DUMMY_TOKENID_SLP_TOKEN_TYPE_FUNGIBLE;
-            const atoms = [
-                1n,
-                2n,
-                4n,
-                8n,
-                16n,
-                32n,
-                64n,
-                128n,
-                256n,
-                512n,
-                1024n,
-                2048n,
-                4096n,
-                8192n,
-                16384n,
-                32768n,
-                65536n,
-                100000n,
-                50000n,
-            ];
-            const utxos = atoms.map((atom, i) => ({
-                ...getDummySlpUtxo(atom, tokenId),
-                outpoint: { ...DUMMY_OUTPOINT, outIdx: 100 + i },
-            }));
-
-            const burnAtoms = 150000n; // 100000 + 50000, the last two UTXOs
-            const result = getTokenUtxosWithExactAtoms(
-                utxos as unknown as WalletUtxo[],
-                tokenId,
-                burnAtoms,
-            );
-
-            expect(result.hasExact).to.equal(false);
-
-            // We hit the limit at 18
-            expect(result.burnUtxos.length).to.equal(18);
-            const accumulatedAtoms = result.burnUtxos.reduce(
-                (sum, u) => sum + (u.token?.atoms ?? 0n),
-                0n,
-            );
-            expect(accumulatedAtoms).to.equal(231071n); // Greater than burnAtoms, but we will need a chained tx for an SLP burn
-        });
-    });
 });
 
 describe('getWalletUtxoFromOutput', () => {
@@ -7459,23 +7399,33 @@ describe('removeSpentUtxos', () => {
 
     it('Removes a single UTXO when transaction has one matching input', () => {
         // Create a wallet with multiple UTXOs
-        const utxo1: WalletUtxo = {
-            ...DUMMY_UTXO,
+        const utxo1: ScriptUtxo = {
             outpoint: { txid: '11'.repeat(32), outIdx: 0 },
+            blockHeight: DUMMY_TIPHEIGHT,
+            isCoinbase: false,
             sats: 546n,
+            isFinal: true,
         };
-        const utxo2: WalletUtxo = {
-            ...DUMMY_UTXO,
+        const utxo2: ScriptUtxo = {
             outpoint: { txid: '22'.repeat(32), outIdx: 0 },
+            blockHeight: DUMMY_TIPHEIGHT,
+            isCoinbase: false,
             sats: 1000n,
+            isFinal: true,
         };
-        const utxo3: WalletUtxo = {
-            ...DUMMY_UTXO,
+        const utxo3: ScriptUtxo = {
             outpoint: { txid: '33'.repeat(32), outIdx: 0 },
+            blockHeight: DUMMY_TIPHEIGHT,
+            isCoinbase: false,
             sats: 2000n,
+            isFinal: true,
         };
 
-        testWallet.utxos = [utxo1, utxo2, utxo3];
+        testWallet.utxos = [
+            { ...utxo1, address: DUMMY_ADDRESS },
+            { ...utxo2, address: DUMMY_ADDRESS },
+            { ...utxo3, address: DUMMY_ADDRESS },
+        ];
         expect(testWallet.utxos.length).to.equal(3);
 
         // Create a transaction that spends utxo2
@@ -7495,35 +7445,57 @@ describe('removeSpentUtxos', () => {
 
         // utxo2 should be removed, utxo1 and utxo3 should remain
         expect(testWallet.utxos.length).to.equal(2);
-        expect(testWallet.utxos).to.deep.include(utxo1);
-        expect(testWallet.utxos).to.deep.include(utxo3);
-        expect(testWallet.utxos).to.not.deep.include(utxo2);
+        expect(testWallet.utxos).to.deep.include({
+            ...utxo1,
+            address: DUMMY_ADDRESS,
+        });
+        expect(testWallet.utxos).to.deep.include({
+            ...utxo3,
+            address: DUMMY_ADDRESS,
+        });
+        expect(testWallet.utxos).to.not.deep.include({
+            ...utxo2,
+            address: DUMMY_ADDRESS,
+        });
     });
 
     it('Removes multiple UTXOs when transaction has multiple matching inputs', () => {
         // Create a wallet with multiple UTXOs
-        const utxo1: WalletUtxo = {
-            ...DUMMY_UTXO,
+        const utxo1: ScriptUtxo = {
             outpoint: { txid: '11'.repeat(32), outIdx: 0 },
+            blockHeight: DUMMY_TIPHEIGHT,
+            isCoinbase: false,
             sats: 546n,
+            isFinal: true,
         };
-        const utxo2: WalletUtxo = {
-            ...DUMMY_UTXO,
+        const utxo2: ScriptUtxo = {
             outpoint: { txid: '22'.repeat(32), outIdx: 0 },
+            blockHeight: DUMMY_TIPHEIGHT,
+            isCoinbase: false,
             sats: 1000n,
+            isFinal: true,
         };
-        const utxo3: WalletUtxo = {
-            ...DUMMY_UTXO,
+        const utxo3: ScriptUtxo = {
             outpoint: { txid: '33'.repeat(32), outIdx: 0 },
+            blockHeight: DUMMY_TIPHEIGHT,
+            isCoinbase: false,
             sats: 2000n,
+            isFinal: true,
         };
-        const utxo4: WalletUtxo = {
-            ...DUMMY_UTXO,
+        const utxo4: ScriptUtxo = {
             outpoint: { txid: '44'.repeat(32), outIdx: 0 },
+            blockHeight: DUMMY_TIPHEIGHT,
+            isCoinbase: false,
             sats: 3000n,
+            isFinal: true,
         };
 
-        testWallet.utxos = [utxo1, utxo2, utxo3, utxo4];
+        testWallet.utxos = [
+            { ...utxo1, address: DUMMY_ADDRESS },
+            { ...utxo2, address: DUMMY_ADDRESS },
+            { ...utxo3, address: DUMMY_ADDRESS },
+            { ...utxo4, address: DUMMY_ADDRESS },
+        ];
         expect(testWallet.utxos.length).to.equal(4);
 
         // Create a transaction that spends utxo1 and utxo3
@@ -7549,26 +7521,45 @@ describe('removeSpentUtxos', () => {
 
         // utxo1 and utxo3 should be removed, utxo2 and utxo4 should remain
         expect(testWallet.utxos.length).to.equal(2);
-        expect(testWallet.utxos).to.deep.include(utxo2);
-        expect(testWallet.utxos).to.deep.include(utxo4);
-        expect(testWallet.utxos).to.not.deep.include(utxo1);
-        expect(testWallet.utxos).to.not.deep.include(utxo3);
+        expect(testWallet.utxos).to.deep.include({
+            ...utxo2,
+            address: DUMMY_ADDRESS,
+        });
+        expect(testWallet.utxos).to.deep.include({
+            ...utxo4,
+            address: DUMMY_ADDRESS,
+        });
+        expect(testWallet.utxos).to.not.deep.include({
+            ...utxo1,
+            address: DUMMY_ADDRESS,
+        });
+        expect(testWallet.utxos).to.not.deep.include({
+            ...utxo3,
+            address: DUMMY_ADDRESS,
+        });
     });
 
     it('Does not remove UTXOs when transaction has no matching inputs', () => {
         // Create a wallet with UTXOs
-        const utxo1: WalletUtxo = {
-            ...DUMMY_UTXO,
+        const utxo1: ScriptUtxo = {
             outpoint: { txid: '11'.repeat(32), outIdx: 0 },
+            blockHeight: DUMMY_TIPHEIGHT,
+            isCoinbase: false,
             sats: 546n,
+            isFinal: true,
         };
-        const utxo2: WalletUtxo = {
-            ...DUMMY_UTXO,
+        const utxo2: ScriptUtxo = {
             outpoint: { txid: '22'.repeat(32), outIdx: 0 },
+            blockHeight: DUMMY_TIPHEIGHT,
+            isCoinbase: false,
             sats: 1000n,
+            isFinal: true,
         };
 
-        testWallet.utxos = [utxo1, utxo2];
+        testWallet.utxos = [
+            { ...utxo1, address: DUMMY_ADDRESS },
+            { ...utxo2, address: DUMMY_ADDRESS },
+        ];
         expect(testWallet.utxos.length).to.equal(2);
 
         // Create a transaction that spends a UTXO not in the wallet
@@ -7588,19 +7579,27 @@ describe('removeSpentUtxos', () => {
 
         // All UTXOs should remain
         expect(testWallet.utxos.length).to.equal(2);
-        expect(testWallet.utxos).to.deep.include(utxo1);
-        expect(testWallet.utxos).to.deep.include(utxo2);
+        expect(testWallet.utxos).to.deep.include({
+            ...utxo1,
+            address: DUMMY_ADDRESS,
+        });
+        expect(testWallet.utxos).to.deep.include({
+            ...utxo2,
+            address: DUMMY_ADDRESS,
+        });
     });
 
     it('Handles transaction with no inputs', () => {
         // Create a wallet with UTXOs
-        const utxo1: WalletUtxo = {
-            ...DUMMY_UTXO,
+        const utxo1: ScriptUtxo = {
             outpoint: { txid: '11'.repeat(32), outIdx: 0 },
+            blockHeight: DUMMY_TIPHEIGHT,
+            isCoinbase: false,
             sats: 546n,
+            isFinal: true,
         };
 
-        testWallet.utxos = [utxo1];
+        testWallet.utxos = [{ ...utxo1, address: DUMMY_ADDRESS }];
         expect(testWallet.utxos.length).to.equal(1);
 
         // Create a transaction with no inputs
@@ -7613,7 +7612,10 @@ describe('removeSpentUtxos', () => {
 
         // All UTXOs should remain
         expect(testWallet.utxos.length).to.equal(1);
-        expect(testWallet.utxos).to.deep.include(utxo1);
+        expect(testWallet.utxos).to.deep.include({
+            ...utxo1,
+            address: DUMMY_ADDRESS,
+        });
     });
 
     it('Handles wallet with no UTXOs', () => {
@@ -7641,23 +7643,33 @@ describe('removeSpentUtxos', () => {
 
     it('Matches UTXOs by both txid and outIdx', () => {
         // Create UTXOs with same txid but different outIdx
-        const utxo1: WalletUtxo = {
-            ...DUMMY_UTXO,
+        const utxo1: ScriptUtxo = {
             outpoint: { txid: '11'.repeat(32), outIdx: 0 },
+            blockHeight: DUMMY_TIPHEIGHT,
+            isCoinbase: false,
             sats: 546n,
+            isFinal: true,
         };
-        const utxo2: WalletUtxo = {
-            ...DUMMY_UTXO,
+        const utxo2: ScriptUtxo = {
             outpoint: { txid: '11'.repeat(32), outIdx: 1 },
+            blockHeight: DUMMY_TIPHEIGHT,
+            isCoinbase: false,
             sats: 1000n,
+            isFinal: true,
         };
-        const utxo3: WalletUtxo = {
-            ...DUMMY_UTXO,
+        const utxo3: ScriptUtxo = {
             outpoint: { txid: '11'.repeat(32), outIdx: 2 },
+            blockHeight: DUMMY_TIPHEIGHT,
+            isCoinbase: false,
             sats: 2000n,
+            isFinal: true,
         };
 
-        testWallet.utxos = [utxo1, utxo2, utxo3];
+        testWallet.utxos = [
+            { ...utxo1, address: DUMMY_ADDRESS },
+            { ...utxo2, address: DUMMY_ADDRESS },
+            { ...utxo3, address: DUMMY_ADDRESS },
+        ];
         expect(testWallet.utxos.length).to.equal(3);
 
         // Create a transaction that spends only utxo2 (same txid, different outIdx)
@@ -7677,30 +7689,49 @@ describe('removeSpentUtxos', () => {
 
         // Only utxo2 should be removed
         expect(testWallet.utxos.length).to.equal(2);
-        expect(testWallet.utxos).to.deep.include(utxo1);
-        expect(testWallet.utxos).to.deep.include(utxo3);
-        expect(testWallet.utxos).to.not.deep.include(utxo2);
+        expect(testWallet.utxos).to.deep.include({
+            ...utxo1,
+            address: DUMMY_ADDRESS,
+        });
+        expect(testWallet.utxos).to.deep.include({
+            ...utxo3,
+            address: DUMMY_ADDRESS,
+        });
+        expect(testWallet.utxos).to.not.deep.include({
+            ...utxo2,
+            address: DUMMY_ADDRESS,
+        });
     });
 
     it('Handles partial matches correctly - removes only matching UTXOs', () => {
         // Create a wallet with multiple UTXOs
-        const utxo1: WalletUtxo = {
-            ...DUMMY_UTXO,
+        const utxo1: ScriptUtxo = {
             outpoint: { txid: '11'.repeat(32), outIdx: 0 },
+            blockHeight: DUMMY_TIPHEIGHT,
+            isCoinbase: false,
             sats: 546n,
+            isFinal: true,
         };
-        const utxo2: WalletUtxo = {
-            ...DUMMY_UTXO,
+        const utxo2: ScriptUtxo = {
             outpoint: { txid: '22'.repeat(32), outIdx: 0 },
+            blockHeight: DUMMY_TIPHEIGHT,
+            isCoinbase: false,
             sats: 1000n,
+            isFinal: true,
         };
-        const utxo3: WalletUtxo = {
-            ...DUMMY_UTXO,
+        const utxo3: ScriptUtxo = {
             outpoint: { txid: '33'.repeat(32), outIdx: 0 },
+            blockHeight: DUMMY_TIPHEIGHT,
+            isCoinbase: false,
             sats: 2000n,
+            isFinal: true,
         };
 
-        testWallet.utxos = [utxo1, utxo2, utxo3];
+        testWallet.utxos = [
+            { ...utxo1, address: DUMMY_ADDRESS },
+            { ...utxo2, address: DUMMY_ADDRESS },
+            { ...utxo3, address: DUMMY_ADDRESS },
+        ];
         expect(testWallet.utxos.length).to.equal(3);
 
         // Create a transaction with one matching input and one non-matching input
@@ -7726,9 +7757,18 @@ describe('removeSpentUtxos', () => {
 
         // Only utxo2 should be removed
         expect(testWallet.utxos.length).to.equal(2);
-        expect(testWallet.utxos).to.deep.include(utxo1);
-        expect(testWallet.utxos).to.deep.include(utxo3);
-        expect(testWallet.utxos).to.not.deep.include(utxo2);
+        expect(testWallet.utxos).to.deep.include({
+            ...utxo1,
+            address: DUMMY_ADDRESS,
+        });
+        expect(testWallet.utxos).to.deep.include({
+            ...utxo3,
+            address: DUMMY_ADDRESS,
+        });
+        expect(testWallet.utxos).to.not.deep.include({
+            ...utxo2,
+            address: DUMMY_ADDRESS,
+        });
     });
 });
 
@@ -8148,27 +8188,27 @@ describe('HD Wallet', () => {
         const change1 = wallet.getChangeAddress(1);
 
         // Set up mock UTXOs for each address
-        const utxo0: WalletUtxo = {
+        const utxo0: ScriptUtxo = {
             ...DUMMY_UTXO,
             outpoint: { ...DUMMY_OUTPOINT, outIdx: 0 },
             sats: 1000n,
         };
-        const utxo1: WalletUtxo = {
+        const utxo1: ScriptUtxo = {
             ...DUMMY_UTXO,
             outpoint: { ...DUMMY_OUTPOINT, outIdx: 1 },
             sats: 2000n,
         };
-        const utxo2: WalletUtxo = {
+        const utxo2: ScriptUtxo = {
             ...DUMMY_UTXO,
             outpoint: { ...DUMMY_OUTPOINT, outIdx: 2 },
             sats: 3000n,
         };
-        const utxo3: WalletUtxo = {
+        const utxo3: ScriptUtxo = {
             ...DUMMY_UTXO,
             outpoint: { ...DUMMY_OUTPOINT, outIdx: 3 },
             sats: 4000n,
         };
-        const utxo4: WalletUtxo = {
+        const utxo4: ScriptUtxo = {
             ...DUMMY_UTXO,
             outpoint: { ...DUMMY_OUTPOINT, outIdx: 4 },
             sats: 5000n,
@@ -8262,12 +8302,12 @@ describe('HD Wallet', () => {
         });
 
         // Set UTXOs
-        const utxo0: WalletUtxo = {
+        const utxo0: ScriptUtxo = {
             ...DUMMY_UTXO,
             outpoint: { ...DUMMY_OUTPOINT, outIdx: 0 },
             sats: 1000n,
         };
-        const utxo1: WalletUtxo = {
+        const utxo1: ScriptUtxo = {
             ...DUMMY_UTXO,
             outpoint: { ...DUMMY_OUTPOINT, outIdx: 1 },
             sats: 2000n,
@@ -8304,7 +8344,7 @@ describe('HD Wallet', () => {
         });
 
         // Set multiple UTXOs per address
-        const utxos0: WalletUtxo[] = [
+        const utxos0: ScriptUtxo[] = [
             {
                 ...DUMMY_UTXO,
                 outpoint: { ...DUMMY_OUTPOINT, outIdx: 0 },
@@ -8316,14 +8356,14 @@ describe('HD Wallet', () => {
                 sats: 2000n,
             },
         ];
-        const utxos1: WalletUtxo[] = [
+        const utxos1: ScriptUtxo[] = [
             {
                 ...DUMMY_UTXO,
                 outpoint: { ...DUMMY_OUTPOINT, outIdx: 2 },
                 sats: 3000n,
             },
         ];
-        const utxos2: WalletUtxo[] = [
+        const utxos2: ScriptUtxo[] = [
             {
                 ...DUMMY_UTXO,
                 outpoint: { ...DUMMY_OUTPOINT, outIdx: 3 },
@@ -8335,7 +8375,7 @@ describe('HD Wallet', () => {
                 sats: 5000n,
             },
         ];
-        const utxos3: WalletUtxo[] = [
+        const utxos3: ScriptUtxo[] = [
             {
                 ...DUMMY_UTXO,
                 outpoint: { ...DUMMY_OUTPOINT, outIdx: 5 },

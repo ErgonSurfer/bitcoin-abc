@@ -329,7 +329,7 @@ class CBlockLocator:
         self.vHave = deser_uint256_vector(f)
 
     def serialize(self) -> bytes:
-        # Bitcoin ABC ignores version field. Set it to 0.
+        # Ergon ABC ignores version field. Set it to 0.
         return struct.pack("<i", 0) + ser_uint256_vector(self.vHave)
 
     def __repr__(self):

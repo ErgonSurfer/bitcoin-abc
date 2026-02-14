@@ -40,26 +40,29 @@ def formula_secp256k1_gej_add_var(branch, a, b):
   s2 = s2 * a.Z
   h = -u1
   h = h + u2
-  i = -s2
-  i = i + s1
+  i = -s1
+  i = i + s2
   if branch == 2:
     r = formula_secp256k1_gej_double_var(a)
     return (constraints(), constraints(zero={h : 'h=0', i : 'i=0', a.Infinity : 'a_finite', b.Infinity : 'b_finite'}), r)
   if branch == 3:
     return (constraints(), constraints(zero={h : 'h=0', a.Infinity : 'a_finite', b.Infinity : 'b_finite'}, nonzero={i : 'i!=0'}), point_at_infinity())
-  t = h * b.Z
-  rz = a.Z * t
+  i2 = i^2
   h2 = h^2
-  h2 = -h2
   h3 = h2 * h
+  h = h * b.Z
+  rz = a.Z * h
   t = u1 * h2
-  rx = i^2
+  rx = t
+  rx = rx * 2
   rx = rx + h3
-  rx = rx + t
-  rx = rx + t
-  t = t + rx
-  ry = t * i
+  rx = -rx
+  rx = rx + i2
+  ry = -rx
+  ry = ry + t
+  ry = ry * i
   h3 = h3 * s1
+  h3 = -h3
   ry = ry + h3
   return (constraints(), constraints(zero={a.Infinity : 'a_finite', b.Infinity : 'b_finite'}, nonzero={h : 'h!=0'}), jacobianpoint(rx, ry, rz))
 
@@ -77,25 +80,28 @@ def formula_secp256k1_gej_add_ge_var(branch, a, b):
   s2 = s2 * a.Z
   h = -u1
   h = h + u2
-  i = -s2
-  i = i + s1
+  i = -s1
+  i = i + s2
   if (branch == 2):
     r = formula_secp256k1_gej_double_var(a)
     return (constraints(zero={b.Z - 1 : 'b.z=1'}), constraints(zero={a.Infinity : 'a_finite', b.Infinity : 'b_finite', h : 'h=0', i : 'i=0'}), r)
   if (branch == 3):
     return (constraints(zero={b.Z - 1 : 'b.z=1'}), constraints(zero={a.Infinity : 'a_finite', b.Infinity : 'b_finite', h : 'h=0'}, nonzero={i : 'i!=0'}), point_at_infinity())
-  rz = a.Z * h
+  i2 = i^2
   h2 = h^2
-  h2 = -h2
-  h3 = h2 * h
+  h3 = h * h2
+  rz = a.Z * h
   t = u1 * h2
-  rx = i^2
+  rx = t
+  rx = rx * 2
   rx = rx + h3
-  rx = rx + t
-  rx = rx + t
-  t = t + rx
-  ry = t * i
+  rx = -rx
+  rx = rx + i2
+  ry = -rx
+  ry = ry + t
+  ry = ry * i
   h3 = h3 * s1
+  h3 = -h3
   ry = ry + h3
   return (constraints(zero={b.Z - 1 : 'b.z=1'}), constraints(zero={a.Infinity : 'a_finite', b.Infinity : 'b_finite'}, nonzero={h : 'h!=0'}), jacobianpoint(rx, ry, rz))
 
@@ -103,15 +109,14 @@ def formula_secp256k1_gej_add_zinv_var(branch, a, b):
   """libsecp256k1's secp256k1_gej_add_zinv_var"""
   bzinv = b.Z^(-1)
   if branch == 0:
-    rinf = b.Infinity
+    return (constraints(), constraints(nonzero={b.Infinity : 'b_infinite'}), a)
+  if branch == 1:
     bzinv2 = bzinv^2
     bzinv3 = bzinv2 * bzinv
     rx = b.X * bzinv2
     ry = b.Y * bzinv3
     rz = 1
-    return (constraints(), constraints(nonzero={a.Infinity : 'a_infinite'}), jacobianpoint(rx, ry, rz, rinf))
-  if branch == 1:
-    return (constraints(), constraints(zero={a.Infinity : 'a_finite'}, nonzero={b.Infinity : 'b_infinite'}), a)
+    return (constraints(), constraints(zero={b.Infinity : 'b_finite'}, nonzero={a.Infinity : 'a_infinite'}), jacobianpoint(rx, ry, rz))
   azz = a.Z * bzinv
   z12 = azz^2
   u1 = a.X
@@ -121,25 +126,29 @@ def formula_secp256k1_gej_add_zinv_var(branch, a, b):
   s2 = s2 * azz
   h = -u1
   h = h + u2
-  i = -s2
-  i = i + s1
+  i = -s1
+  i = i + s2
   if branch == 2:
     r = formula_secp256k1_gej_double_var(a)
     return (constraints(), constraints(zero={a.Infinity : 'a_finite', b.Infinity : 'b_finite', h : 'h=0', i : 'i=0'}), r)
   if branch == 3:
     return (constraints(), constraints(zero={a.Infinity : 'a_finite', b.Infinity : 'b_finite', h : 'h=0'}, nonzero={i : 'i!=0'}), point_at_infinity())
-  rz = a.Z * h
+  i2 = i^2
   h2 = h^2
-  h2 = -h2
-  h3 = h2 * h
+  h3 = h * h2
+  rz = a.Z
+  rz = rz * h
   t = u1 * h2
-  rx = i^2
+  rx = t
+  rx = rx * 2
   rx = rx + h3
-  rx = rx + t
-  rx = rx + t
-  t = t + rx
-  ry = t * i
+  rx = -rx
+  rx = rx + i2
+  ry = -rx
+  ry = ry + t
+  ry = ry * i
   h3 = h3 * s1
+  h3 = -h3
   ry = ry + h3
   return (constraints(), constraints(zero={a.Infinity : 'a_finite', b.Infinity : 'b_finite'}, nonzero={h : 'h!=0'}), jacobianpoint(rx, ry, rz))
 

@@ -37,7 +37,7 @@ static const int MAX_SCRIPT_SIZE = 10000;
 static const int MAX_STACK_SIZE = 1000;
 
 // Maximum byte size of integers for arithmetic opcodes when interpreting Script
-constexpr size_t MAX_SCRIPTNUM_BYTE_SIZE = 8;
+constexpr size_t MAX_SCRIPTNUM_BYTE_SIZE = 4;
 
 // Threshold for nLockTime: below this value it is interpreted as block number,
 // otherwise as UNIX timestamp. Thresold is Tue Nov 5 00:53:20 1985 UTC
@@ -278,18 +278,10 @@ public:
     }
 
     inline CScriptNum operator+(const int64_t &rhs) const {
-        int64_t result;
-        if (AddInt63Overflow(m_value, rhs, result)) {
-            throw scriptnum_overflow_error("script number overflow");
-        }
-        return CScriptNum(result);
+        return CScriptNum(m_value + rhs);
     }
     inline CScriptNum operator-(const int64_t &rhs) const {
-        int64_t result;
-        if (SubInt63Overflow(m_value, rhs, result)) {
-            throw scriptnum_overflow_error("script number overflow");
-        }
-        return CScriptNum(result);
+        return CScriptNum(m_value - rhs);
     }
     inline CScriptNum operator+(const CScriptNum &rhs) const {
         return operator+(rhs.m_value);
@@ -341,14 +333,20 @@ public:
     }
 
     inline CScriptNum &operator+=(const int64_t &rhs) {
-        assert(m_value != std::numeric_limits<int64_t>::min());
-        *this = *this + CScriptNum(rhs);
+        assert(
+            rhs == 0 ||
+            (rhs > 0 && m_value <= std::numeric_limits<int64_t>::max() - rhs) ||
+            (rhs < 0 && m_value >= std::numeric_limits<int64_t>::min() - rhs));
+        m_value += rhs;
         return *this;
     }
 
     inline CScriptNum &operator-=(const int64_t &rhs) {
-        assert(m_value != std::numeric_limits<int64_t>::min());
-        *this = *this - CScriptNum(rhs);
+        assert(
+            rhs == 0 ||
+            (rhs > 0 && m_value >= std::numeric_limits<int64_t>::min() + rhs) ||
+            (rhs < 0 && m_value <= std::numeric_limits<int64_t>::max() + rhs));
+        m_value -= rhs;
         return *this;
     }
 
@@ -357,7 +355,14 @@ public:
         return *this;
     }
 
-    int64_t getint() const { return m_value; }
+    int getint() const {
+        if (m_value > std::numeric_limits<int>::max()) {
+            return std::numeric_limits<int>::max();
+        } else if (m_value < std::numeric_limits<int>::min()) {
+            return std::numeric_limits<int>::min();
+        }
+        return m_value;
+    }
 
     std::vector<uint8_t> getvch() const { return serialize(m_value); }
 

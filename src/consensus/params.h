@@ -72,6 +72,15 @@ struct Params {
     /** Enable or disable the staking rewards by default */
     bool enableStakingRewards;
 
+    /** Enable or disable proportional reward mode by default */
+    bool enableProportionalReward;
+
+    /** Proportional reward calibration factor */
+    int64_t nValueCalibration;
+
+    /** Unix time used for MTP activation of Ergon EMA DAA */
+    int64_t emaDAAActivationTime;
+
     /** Proof of work parameters */
     uint256 powLimit;
     bool fPowAllowMinDifficultyBlocks;

@@ -13,6 +13,7 @@ schnorr_example
 *.so
 *.a
 *.csv
+!.gitignore
 *.log
 *.trs
 
@@ -33,6 +34,8 @@ libtool
 *.lo
 *.o
 *~
+*.log
+*.trs
 src/libsecp256k1-config.h
 src/libsecp256k1-config.h.in
 build-aux/ar-lib

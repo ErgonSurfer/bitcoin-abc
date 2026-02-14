@@ -52,4 +52,7 @@ bool IsCowperthwaiteEnabled(const Consensus::Params &params, int32_t nHeight);
 bool IsCowperthwaiteEnabled(const Consensus::Params &params,
                             const CBlockIndex *pindexPrev);
 
+bool IsErgonEMAEnabled(const Consensus::Params &params,
+                       const CBlockIndex *pindexPrev);
+
 #endif // BITCOIN_CONSENSUS_ACTIVATION_H

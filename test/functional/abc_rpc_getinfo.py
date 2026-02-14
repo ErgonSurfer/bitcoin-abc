@@ -2,7 +2,7 @@
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-# Exercise the Bitcoin ABC getinfo RPC.
+# Exercise the Ergon ABC getinfo RPC.
 
 from test_framework.test_framework import BitcoinTestFramework
 from test_framework.util import assert_equal, get_cli_version

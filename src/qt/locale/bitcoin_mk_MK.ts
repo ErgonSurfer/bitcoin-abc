@@ -578,7 +578,7 @@
         <translation>Опции:</translation>
     </message>
     <message>
-        <source>Bitcoin ABC</source>
+        <source>Ergon ABC</source>
         <translation>Биткоин ABC</translation>
     </message>
     <message>

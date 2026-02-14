@@ -1338,7 +1338,7 @@
         <translation>Ruli fone kiel demono kaj akcepti komandojn</translation>
     </message>
     <message>
-        <source>Bitcoin ABC</source>
+        <source>Ergon ABC</source>
         <translation>ABC Bitmono</translation>
     </message>
     <message>

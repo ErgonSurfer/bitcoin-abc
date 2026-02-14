@@ -7,7 +7,7 @@ This library was originally developed by
 [Peter Wuille](https://twitter.com/pwuille?lang=en) for Bitcoin, and has since
 been adapted and used in many major cryptocurrencies for fast elliptic curve
 operations.
-Bitcoin ABC maintains a fork of the library with additional features
+Ergon ABC maintains a fork of the library with additional features
 required by Electrum ABC, such as the eCash variant of Schnorr signatures.
 
 ### Using libsecp with Electrum ABC

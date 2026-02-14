@@ -65,7 +65,7 @@ function(add_functional_test_check TARGET DESCRIPTION)
 		TEST_COMMAND
 			"${Python_EXECUTABLE}"
 			./functional/test_runner.py
-			"--testsuitename=Bitcoin ABC ${DESCRIPTION}"
+			"--testsuitename=Ergon ABC ${DESCRIPTION}"
 			${JUNIT_OUTPUT}
 			${EXTENDED_TIMEOUT}
 			${TMPDIRPREFIX}

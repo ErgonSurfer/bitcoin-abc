@@ -1208,8 +1208,8 @@
         <translation>Демон сифатида орқа фонда ишга туширинг ва буйруқларга рози бўлинг</translation>
     </message>
     <message>
-        <source>Bitcoin ABC</source>
-        <translation>Bitcoin ABC</translation>
+        <source>Ergon ABC</source>
+        <translation>Ergon ABC</translation>
     </message>
     <message>
         <source>Connection options:</source>

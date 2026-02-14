@@ -15,7 +15,7 @@ void SetupChainParamsBaseOptions(ArgsManager &argsman) {
     argsman.AddArg(
         "-chain=<chain>",
         "Use the chain <chain> (default: main). Allowed values: main, "
-        "test, regtest",
+        "test, regtest, ergon",
         ArgsManager::ALLOW_ANY, OptionsCategory::CHAINPARAMS);
     argsman.AddArg(
         "-regtest",
@@ -25,6 +25,8 @@ void SetupChainParamsBaseOptions(ArgsManager &argsman) {
         ArgsManager::ALLOW_ANY | ArgsManager::DEBUG_ONLY,
         OptionsCategory::CHAINPARAMS);
     argsman.AddArg("-testnet", "Use the test chain. Equivalent to -chain=test.",
+                   ArgsManager::ALLOW_ANY, OptionsCategory::CHAINPARAMS);
+    argsman.AddArg("-ergon", "Use the Ergon chain. Equivalent to -chain=ergon.",
                    ArgsManager::ALLOW_ANY, OptionsCategory::CHAINPARAMS);
 }
 
@@ -57,6 +59,11 @@ std::unique_ptr<CBaseChainParams> CreateBaseChainParams(const ChainType chain) {
                 "regtest", /*rpc_port=*/18443, 18445,
                 /*chronik_port=*/18442,
                 /*chronik_electrum_port=*/60103);
+        case ChainType::ERGON:
+            return std::make_unique<CBaseChainParams>(
+                "ergon", /*rpc_port=*/2136, 2138,
+                /*chronik_port=*/2135,
+                /*chronik_electrum_port=*/62002);
     }
     throw std::invalid_argument(
         strprintf("%s: Invalid ChainType value", __func__));

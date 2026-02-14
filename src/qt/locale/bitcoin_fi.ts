@@ -1790,7 +1790,7 @@
         <translation>HTTP-palvelinta ei voitu käynnistää. Katso debug-lokista lisätietoja.</translation>
     </message>
     <message>
-        <source>Bitcoin ABC</source>
+        <source>Ergon ABC</source>
         <translation>Bitcoin-abc</translation>
     </message>
     <message>

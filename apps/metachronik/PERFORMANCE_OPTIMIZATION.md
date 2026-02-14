@@ -111,7 +111,7 @@ CRON_SCHEDULE=0 */6 * * *
 
 ### Production Deployment
 
-Production deployment is handled by Bitcoin ABC CI/CD pipeline. The performance optimizations documented here are applicable to any deployment environment with similar hardware specifications (8GB RAM, 8 vCPU).
+Production deployment is handled by Ergon ABC CI/CD pipeline. The performance optimizations documented here are applicable to any deployment environment with similar hardware specifications (8GB RAM, 8 vCPU).
 
 ---
 

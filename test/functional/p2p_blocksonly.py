@@ -81,7 +81,7 @@ class P2PBlocksOnly(BitcoinTestFramework):
             # Note that normally, first_peer would never send us transactions
             # since we're a blocksonly node. By activating blocksonly, we
             # explicitly tell our peers that they should not send us
-            # transactions, and Bitcoin ABC respects that choice and will not
+            # transactions, and Ergon ABC respects that choice and will not
             # send transactions.
             # But if, for some reason, first_peer decides to relay transactions
             # to us anyway, we should relay them to second_peer since we gave

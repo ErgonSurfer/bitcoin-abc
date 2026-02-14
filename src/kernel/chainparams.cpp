@@ -112,6 +112,9 @@ public:
 
         // The staking rewards are enabled by default on mainnet.
         consensus.enableStakingRewards = true;
+        consensus.enableProportionalReward = false;
+        consensus.nValueCalibration = 0;
+        consensus.emaDAAActivationTime = 0;
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork =
@@ -188,7 +191,7 @@ public:
         // the service bits we want, but we should get them updated to support
         // all service bits wanted by any release ASAP to avoid it where
         // possible.
-        // Bitcoin ABC seeder
+        // Ergon ABC seeder
         vSeeds.emplace_back("seed.bitcoinabc.org");
         // Fabien
         vSeeds.emplace_back("seeder.fabien.cash");
@@ -283,6 +286,9 @@ public:
 
         // The staking rewards are disabled by default on testnet.
         consensus.enableStakingRewards = false;
+        consensus.enableProportionalReward = false;
+        consensus.nValueCalibration = 0;
+        consensus.emaDAAActivationTime = 0;
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork =
@@ -351,7 +357,7 @@ public:
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        // Bitcoin ABC seeder
+        // Ergon ABC seeder
         vSeeds.emplace_back("testnet-seed.bitcoinabc.org");
         // Fabien
         vSeeds.emplace_back("testnet-seeder.fabien.cash");
@@ -438,6 +444,9 @@ public:
 
         // The staking rewards are disabled by default on regtest.
         consensus.enableStakingRewards = false;
+        consensus.enableProportionalReward = false;
+        consensus.nValueCalibration = 0;
+        consensus.emaDAAActivationTime = 0;
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x00");
@@ -541,6 +550,97 @@ public:
     }
 };
 
+class CErgonParams : public CChainParams {
+public:
+    explicit CErgonParams(const ChainOptions &opts) {
+        (void)opts;
+        m_chain_type = ChainType::ERGON;
+        consensus.nSubsidyHalvingInterval = 144;
+        consensus.BIP16Height = 0;
+        consensus.BIP34Height = 0;
+        consensus.BIP34Hash = BlockHash::fromHex(
+            "000000000000024b89b42a942fe0d9fea3bb44ab7bd1b19115dd6a759c0808b8");
+        consensus.BIP65Height = 0;
+        consensus.BIP66Height = 0;
+        consensus.CSVHeight = 0;
+        consensus.powLimit = uint256S(
+            "0000000fffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.nPowTargetTimespan = 14 * 24 * 60 * 60;
+        consensus.nPowTargetSpacing = 10 * 60;
+        consensus.fPowAllowMinDifficultyBlocks = false;
+        consensus.fPowNoRetargeting = false;
+        consensus.nDAAHalfLife = 2 * 24 * 60 * 60;
+
+        consensus.enableMinerFund = false;
+        consensus.enableStakingRewards = false;
+        consensus.enableProportionalReward = true;
+        consensus.nValueCalibration = 7100000000000;
+        consensus.emaDAAActivationTime = 1659182400;
+
+        consensus.nMinimumChainWork = uint256S(
+            "0000000000000000000000000000000000000000000000000000000000000184");
+        consensus.defaultAssumeValid = BlockHash::fromHex(
+            "0x000000070e37bfee7e84b94f997f38155a85b22172f5ca25fd4eb3d64c5ad7c5");
+
+        consensus.uahfHeight = 0;
+        consensus.daaHeight = 0;
+        consensus.magneticAnomalyHeight = 0;
+        consensus.gravitonHeight = 0;
+        consensus.phononHeight = 0;
+        consensus.axionHeight = 0;
+        consensus.wellingtonHeight = 0;
+        consensus.cowperthwaiteHeight = 0;
+        consensus.schumpeterActivationTime = 2147483647;
+        consensus.obolenskyActivationTime = 2147483647;
+
+        diskMagic[0] = 194;
+        diskMagic[1] = 95;
+        diskMagic[2] = 143;
+        diskMagic[3] = 196;
+        netMagic[0] = 135;
+        netMagic[1] = 215;
+        netMagic[2] = 51;
+        netMagic[3] = 46;
+        nDefaultPort = 2137;
+        nPruneAfterHeight = 100000;
+        m_assumed_blockchain_size = 0;
+        m_assumed_chain_state_size = 0;
+
+        genesis =
+            CreateGenesisBlock(1607003022, 92586649, 0x1d0fffff, 1, 0 * COIN);
+        consensus.hashGenesisBlock = genesis.GetHash();
+        assert(consensus.hashGenesisBlock ==
+               uint256S("000000070e37bfee7e84b94f997f38155a85b22172f5ca25fd4eb3"
+                        "d64c5ad7c5"));
+        assert(genesis.hashMerkleRoot ==
+               uint256S("dc6c10ad2a26613ae9b8a156ed9ca15e3e355a994a7e32cd7a4c3d"
+                        "7a478f57d2"));
+
+        vSeeds.clear();
+        vSeeds.emplace_back("dnsseed.ergon.moe");
+        vSeeds.emplace_back("seed.ergon.loping.net");
+
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<uint8_t>(1, 0);
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<uint8_t>(1, 5);
+        base58Prefixes[SECRET_KEY] = std::vector<uint8_t>(1, 128);
+        base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x88, 0xB2, 0x1E};
+        base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x88, 0xAD, 0xE4};
+        cashaddrPrefix = "ergon";
+
+        vFixedSeeds = std::vector<SeedSpec6>(std::begin(pnSeed6_ergon),
+                                             std::end(pnSeed6_ergon));
+
+        fDefaultConsistencyChecks = false;
+        fRequireStandard = true;
+        m_is_test_chain = false;
+        m_is_mockable_chain = false;
+
+        checkpointData = CheckpointData(ChainType::ERGON);
+        m_assumeutxo_data = {};
+        chainTxData = ChainTxData{1620430294, 1713, 0.00167};
+    }
+};
+
 std::unique_ptr<const CChainParams>
 CChainParams::RegTest(const ChainOptions &options) {
     return std::make_unique<const CRegTestParams>(options);
@@ -554,6 +654,11 @@ CChainParams::Main(const ChainOptions &options) {
 std::unique_ptr<const CChainParams>
 CChainParams::TestNet(const ChainOptions &options) {
     return std::make_unique<const CTestNetParams>(options);
+}
+
+std::unique_ptr<const CChainParams>
+CChainParams::Ergon(const ChainOptions &options) {
+    return std::make_unique<const CErgonParams>(options);
 }
 
 std::vector<int> CChainParams::GetAvailableSnapshotHeights() const {
@@ -572,6 +677,7 @@ GetNetworkForMagic(CMessageHeader::MessageMagic &message) {
     const auto mainnet_msg = CChainParams::Main(opts)->DiskMagic();
     const auto testnet_msg = CChainParams::TestNet(opts)->DiskMagic();
     const auto regtest_msg = CChainParams::RegTest(opts)->DiskMagic();
+    const auto ergon_msg = CChainParams::Ergon(opts)->DiskMagic();
 
     if (std::equal(message.begin(), message.end(), mainnet_msg.data())) {
         return ChainType::MAIN;
@@ -579,6 +685,8 @@ GetNetworkForMagic(CMessageHeader::MessageMagic &message) {
         return ChainType::TESTNET;
     } else if (std::equal(message.begin(), message.end(), regtest_msg.data())) {
         return ChainType::REGTEST;
+    } else if (std::equal(message.begin(), message.end(), ergon_msg.data())) {
+        return ChainType::ERGON;
     }
     return std::nullopt;
 }

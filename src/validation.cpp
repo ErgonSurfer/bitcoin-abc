@@ -374,7 +374,7 @@ public:
                 /*test_accept=*/false,
                 /*height_override=*/0,
                 /*package_submission=*/true,
-                /*package_feerates=*/true,
+                /*package_feerates=*/false,
             };
         }
 
@@ -552,7 +552,7 @@ private:
         if (mempoolRejectFee > Amount::zero() &&
             package_fee < mempoolRejectFee) {
             return state.Invalid(
-                TxValidationResult::TX_PACKAGE_RECONSIDERABLE,
+                TxValidationResult::TX_MEMPOOL_POLICY,
                 "mempool min fee not met",
                 strprintf("%d < %d", package_fee, mempoolRejectFee));
         }
@@ -561,7 +561,7 @@ private:
         // policy upgrade.
         if (package_fee < m_pool.m_min_relay_feerate.GetFee(package_size)) {
             return state.Invalid(
-                TxValidationResult::TX_PACKAGE_RECONSIDERABLE,
+                TxValidationResult::TX_MEMPOOL_POLICY,
                 "min relay fee not met",
                 strprintf("%d < %d", package_fee,
                           m_pool.m_min_relay_feerate.GetFee(package_size)));
@@ -642,9 +642,8 @@ bool MemPoolAccept::PreChecks(ATMPArgs &args, Workspace &ws) {
                                      "finalized-tx-conflict");
             }
 
-            return state.Invalid(
-                TxValidationResult::TX_AVALANCHE_RECONSIDERABLE,
-                "txn-mempool-conflict");
+            return state.Invalid(TxValidationResult::TX_MEMPOOL_POLICY,
+                                 "txn-mempool-conflict");
         }
     }
 
@@ -768,10 +767,9 @@ bool MemPoolAccept::PreChecks(ATMPArgs &args, Workspace &ws) {
             strprintf("%d < %d", ws.m_modified_fees,
                       m_pool.m_min_relay_feerate.GetFee(nSize)));
     }
-    // No individual transactions are allowed below the mempool min feerate
-    // except from disconnected blocks and transactions in a package. Package
-    // transactions will be checked using package feerate later.
-    if (!bypass_limits && !args.m_package_feerates &&
+    // No transactions are allowed below the mempool min feerate except from
+    // disconnected blocks.
+    if (!bypass_limits &&
         !CheckFeeRate(nSize, ws.m_vsize, ws.m_modified_fees, state)) {
         return false;
     }
@@ -850,9 +848,7 @@ bool MemPoolAccept::Finalize(const ATMPArgs &args, Workspace &ws) {
     if (!args.m_package_submission && !bypass_limits) {
         m_pool.LimitSize(m_active_chainstate.CoinsTip());
         if (!m_pool.exists(txid)) {
-            // The tx no longer meets our (new) mempool minimum feerate but
-            // could be reconsidered in a package.
-            return state.Invalid(TxValidationResult::TX_PACKAGE_RECONSIDERABLE,
+            return state.Invalid(TxValidationResult::TX_MEMPOOL_POLICY,
                                  "mempool full");
         }
     }
@@ -912,23 +908,12 @@ bool MemPoolAccept::SubmitPackage(
     // mempool. Regardless, make sure we haven't exceeded max mempool size.
     m_pool.LimitSize(m_active_chainstate.CoinsTip());
 
-    std::vector<TxId> all_package_txids;
-    all_package_txids.reserve(workspaces.size());
-    std::transform(workspaces.cbegin(), workspaces.cend(),
-                   std::back_inserter(all_package_txids),
-                   [](const auto &ws) { return ws.m_ptx->GetId(); });
-
     // Add successful results. The returned results may change later if
     // LimitMempoolSize() evicts them.
     for (Workspace &ws : workspaces) {
-        const auto effective_feerate =
-            args.m_package_feerates
-                ? ws.m_package_feerate
-                : CFeeRate{ws.m_modified_fees,
-                           static_cast<uint32_t>(ws.m_vsize)};
-        const auto effective_feerate_txids =
-            args.m_package_feerates ? all_package_txids
-                                    : std::vector<TxId>({ws.m_ptx->GetId()});
+        const CFeeRate effective_feerate{
+            ws.m_modified_fees, static_cast<uint32_t>(ws.m_vsize)};
+        const std::vector<TxId> effective_feerate_txids{ws.m_ptx->GetId()};
         results.emplace(ws.m_ptx->GetId(),
                         MempoolAcceptResult::Success(ws.m_vsize, ws.m_base_fees,
                                                      effective_feerate,
@@ -956,8 +941,7 @@ MemPoolAccept::AcceptSingleTransaction(const CTransactionRef &ptx,
     // verification unless those checks pass, to mitigate CPU exhaustion
     // denial-of-service attacks.
     if (!PreChecks(args, ws)) {
-        if (ws.m_state.GetResult() ==
-            TxValidationResult::TX_PACKAGE_RECONSIDERABLE) {
+        if (ws.m_state.GetResult() == TxValidationResult::TX_MEMPOOL_POLICY) {
             // Failed for fee reasons. Provide the effective feerate and which
             // tx was included.
             return MempoolAcceptResult::FeeFailure(
@@ -1004,8 +988,7 @@ MemPoolAccept::AcceptSingleTransaction(const CTransactionRef &ptx,
         // The only possible failure reason is fee-related (mempool full).
         // Failed for fee reasons. Provide the effective feerate and which txns
         // were included.
-        Assume(ws.m_state.GetResult() ==
-               TxValidationResult::TX_PACKAGE_RECONSIDERABLE);
+        Assume(ws.m_state.GetResult() == TxValidationResult::TX_MEMPOOL_POLICY);
         return MempoolAcceptResult::FeeFailure(
             ws.m_state, CFeeRate(ws.m_modified_fees, ws.m_vsize), single_txid);
     }
@@ -1058,61 +1041,14 @@ PackageMempoolAcceptResult MemPoolAccept::AcceptMultipleTransactions(
         valid_txids.push_back(ws.m_ptx->GetId());
     }
 
-    // Transactions must meet two minimum feerates: the mempool minimum fee and
-    // min relay fee. For transactions consisting of exactly one child and its
-    // parents, it suffices to use the package feerate
-    // (total modified fees / total size or vsize) to check this requirement.
-    // Note that this is an aggregate feerate; this function has not checked
-    // that there are transactions too low feerate to pay for themselves, or
-    // that the child transactions are higher feerate than their parents. Using
-    // aggregate feerate may allow "parents pay for child" behavior and permit
-    // a child that is below mempool minimum feerate. To avoid these behaviors,
-    // callers of AcceptMultipleTransactions need to restrict txns topology
-    // (e.g. to ancestor sets) and check the feerates of individuals and
-    // subsets.
-    const auto m_total_size = std::accumulate(
-        workspaces.cbegin(), workspaces.cend(), int64_t{0},
-        [](int64_t sum, auto &ws) { return sum + ws.m_ptx->GetTotalSize(); });
-    const auto m_total_vsize =
-        std::accumulate(workspaces.cbegin(), workspaces.cend(), int64_t{0},
-                        [](int64_t sum, auto &ws) { return sum + ws.m_vsize; });
-    const auto m_total_modified_fees = std::accumulate(
-        workspaces.cbegin(), workspaces.cend(), Amount::zero(),
-        [](Amount sum, auto &ws) { return sum + ws.m_modified_fees; });
-    const CFeeRate package_feerate(m_total_modified_fees, m_total_vsize);
-    std::vector<TxId> all_package_txids;
-    all_package_txids.reserve(workspaces.size());
-    std::transform(workspaces.cbegin(), workspaces.cend(),
-                   std::back_inserter(all_package_txids),
-                   [](const auto &ws) { return ws.m_ptx->GetId(); });
-    TxValidationState placeholder_state;
-    if (args.m_package_feerates &&
-        !CheckFeeRate(m_total_size, m_total_vsize, m_total_modified_fees,
-                      placeholder_state)) {
-        package_state.Invalid(PackageValidationResult::PCKG_TX,
-                              "transaction failed");
-        return PackageMempoolAcceptResult(
-            package_state, {{workspaces.back().m_ptx->GetId(),
-                             MempoolAcceptResult::FeeFailure(
-                                 placeholder_state,
-                                 CFeeRate(m_total_modified_fees, m_total_vsize),
-                                 all_package_txids)}});
-    }
-
     for (Workspace &ws : workspaces) {
-        ws.m_package_feerate = package_feerate;
         const TxId &ws_txid = ws.m_ptx->GetId();
         if (args.m_test_accept &&
             std::find(valid_txids.begin(), valid_txids.end(), ws_txid) !=
                 valid_txids.end()) {
-            const auto effective_feerate =
-                args.m_package_feerates
-                    ? ws.m_package_feerate
-                    : CFeeRate{ws.m_modified_fees,
-                               static_cast<uint32_t>(ws.m_vsize)};
-            const auto effective_feerate_txids =
-                args.m_package_feerates ? all_package_txids
-                                        : std::vector<TxId>{ws.m_ptx->GetId()};
+            const CFeeRate effective_feerate{
+                ws.m_modified_fees, static_cast<uint32_t>(ws.m_vsize)};
+            const std::vector<TxId> effective_feerate_txids{ws.m_ptx->GetId()};
             // When test_accept=true, transactions that pass PreChecks
             // are valid because there are no further mempool checks (passing
             // PreChecks implies passing ConsensusScriptChecks).
@@ -1484,7 +1420,64 @@ PackageMempoolAcceptResult ProcessNewPackage(Chainstate &active_chainstate,
     return result;
 }
 
-Amount GetBlockSubsidy(int nHeight, const Consensus::Params &consensusParams) {
+static Amount GetErgonBlockSubsidy(const CBlockIndex *pindexPrev,
+                                   uint32_t nBits, int nHeight,
+                                   const Consensus::Params &consensusParams) {
+    arith_uint256 bnTarget;
+    bool fNegative;
+    bool fOverflow;
+    bnTarget.SetCompact(nBits, &fNegative, &fOverflow);
+    if (fNegative || fOverflow || bnTarget == 0) {
+        return Amount::zero();
+    }
+
+    arith_uint256 aWork = (~bnTarget / (bnTarget + 1)) + 1;
+
+    const CBlockIndex *emaBlock = pindexPrev;
+    while (emaBlock != nullptr && emaBlock->pprev != nullptr) {
+        if (emaBlock->pskip != nullptr &&
+            IsErgonEMAEnabled(consensusParams, emaBlock->pskip)) {
+            emaBlock = emaBlock->pskip;
+            continue;
+        }
+        if (!IsErgonEMAEnabled(consensusParams, emaBlock->pprev)) {
+            break;
+        }
+        emaBlock = emaBlock->pprev;
+    }
+
+    if (emaBlock == nullptr) {
+        return Amount::zero();
+    }
+
+    int divisions = nHeight / consensusParams.nSubsidyHalvingInterval;
+    int emaHeight = emaBlock->nHeight / consensusParams.nSubsidyHalvingInterval;
+    for (int i = 0; i < divisions; i++) {
+        if (i < emaHeight) {
+            aWork *= 99826;
+            aWork /= 100000;
+        } else {
+            aWork *= 99918;
+            aWork /= 100000;
+        }
+    }
+
+    if (consensusParams.nValueCalibration <= 0) {
+        return Amount::zero();
+    }
+    aWork /= consensusParams.nValueCalibration;
+    const uint256 uWork = ArithToUint256(aWork);
+    const int64_t iWork = uWork.GetUint64(0);
+    return iWork * Amount::satoshi();
+}
+
+Amount GetBlockSubsidy(const CBlockIndex *pindexPrev, uint32_t nBits,
+                       int nHeight, const Consensus::Params &consensusParams) {
+    if (consensusParams.enableProportionalReward) {
+        return GetErgonBlockSubsidy(pindexPrev, nBits, nHeight,
+                                    consensusParams);
+    }
+
     int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
     // Force block reward to zero when right shift is undefined.
     if (halvings >= 64) {
@@ -1495,6 +1488,27 @@ Amount GetBlockSubsidy(int nHeight, const Consensus::Params &consensusParams) {
     // Subsidy is cut in half every 210,000 blocks which will occur
     // approximately every 4 years.
     return ((nSubsidy / SATOSHI) >> halvings) * SATOSHI;
+}
+
+Amount GetBlockSubsidy(int nHeight, const Consensus::Params &consensusParams) {
+    int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
+    if (halvings >= 64) {
+        return Amount::zero();
+    }
+
+    Amount nSubsidy = 50 * COIN;
+    return ((nSubsidy / SATOSHI) >> halvings) * SATOSHI;
+}
+
+Amount GetBlockReward(const CBlockIndex *pindexPrev, uint32_t nBits,
+                      int nHeight, const Consensus::Params &consensusParams,
+                      Amount nFees) {
+    const Amount subsidy =
+        GetBlockSubsidy(pindexPrev, nBits, nHeight, consensusParams);
+    if (consensusParams.enableProportionalReward) {
+        return nFees / 2 + subsidy;
+    }
+    return nFees + subsidy;
 }
 
 CoinsViews::CoinsViews(DBParams db_params, CoinsViewOptions options)
@@ -2504,8 +2518,8 @@ bool Chainstate::ConnectBlock(const CBlock &block, BlockValidationState &state,
              Ticks<SecondsDouble>(time_connect),
              Ticks<MillisecondsDouble>(time_connect) / num_blocks_total);
 
-    const Amount blockReward =
-        nFees + GetBlockSubsidy(pindex->nHeight, consensusParams);
+    const Amount blockReward = GetBlockReward(
+        pindex->pprev, pindex->nBits, pindex->nHeight, consensusParams, nFees);
     if (block.vtx[0]->GetValueOut() > blockReward && state.IsValid()) {
         state.Invalid(
             BlockValidationResult::BLOCK_CONSENSUS, "bad-cb-amount",
@@ -3055,8 +3069,8 @@ bool Chainstate::ConnectTip(BlockValidationState &state,
             m_filterParkingPoliciesApplied.insert(blockhash);
 
             const Amount blockReward =
-                blockFees +
-                GetBlockSubsidy(pindexNew->nHeight, consensusParams);
+                GetBlockReward(pindexNew->pprev, pindexNew->nBits,
+                               pindexNew->nHeight, consensusParams, blockFees);
 
             std::vector<std::unique_ptr<ParkingPolicy>> parkingPolicies;
             parkingPolicies.emplace_back(std::make_unique<MinerFundPolicy>(

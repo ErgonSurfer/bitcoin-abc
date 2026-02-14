@@ -35,7 +35,7 @@ const TeamList: React.FC = () => {
         <div className="flex w-full flex-col p-8 lg:p-14">
           <div className="flex w-full flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="flex max-w-[270px] flex-col items-start gap-6 lg:w-1/2 lg:max-w-[380px]">
-              <PlusHeader text="Meet Bitcoin ABC" />
+              <PlusHeader text="Meet Ergon ABC" />
               <h2>
                 The team behind <span className="gradient-text">eCash</span>
               </h2>

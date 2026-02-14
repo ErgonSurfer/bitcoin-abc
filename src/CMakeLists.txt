@@ -32,7 +32,7 @@ option(ENABLE_UPNP "Enable UPnP support" ON)
 option(START_WITH_UPNP "Make UPnP the default to map ports" OFF)
 option(ENABLE_NATPMP "Enable NAT-PMP support" ON)
 option(START_WITH_NATPMP "Make NAT-PMP the default to map ports" OFF)
-option(ENABLE_CLANG_TIDY "Enable clang-tidy checks for Bitcoin ABC" OFF)
+option(ENABLE_CLANG_TIDY "Enable clang-tidy checks for Ergon ABC" OFF)
 option(ENABLE_PROFILING "Select the profiling tool to use" OFF)
 option(ENABLE_TRACING "Enable eBPF user static defined tracepoints" OFF)
 
@@ -689,6 +689,7 @@ add_library(server
 	pow/aserti32d.cpp
 	pow/daa.cpp
 	pow/eda.cpp
+	pow/ergon.cpp
 	pow/grasberg.cpp
 	pow/pow.cpp
 	rest.cpp
@@ -904,6 +905,7 @@ if(BUILD_CHAINSTATE)
 		pow/aserti32d.cpp
 		pow/daa.cpp
 		pow/eda.cpp
+		pow/ergon.cpp
 		pow/pow.cpp
 		primitives/block.cpp
 		primitives/transaction.cpp
@@ -955,7 +957,7 @@ if(BUILD_CHAINSTATE)
 		versionbits.cpp
 		warnings.cpp
 
-		# Bitcoin ABC specific dependencies that will not go away with Core backports
+		# Ergon ABC specific dependencies that will not go away with Core backports
 		addrdb.cpp   # via banman.cpp
 		addrman.cpp  # via net.cpp
 		banman.cpp   # via net.cpp

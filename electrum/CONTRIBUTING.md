@@ -2,12 +2,12 @@
 
 ## Main repository
 
-The Electrum ABC source repository has been merged into the Bitcoin ABC repository,
+The Electrum ABC source repository has been merged into the Ergon ABC repository,
 and the development is now taking place at [reviews.bitcoinabc.org](https://reviews.bitcoinabc.org/).
 
 Please read the main [CONTRIBUTING.md](https://github.com/Bitcoin-ABC/bitcoin-abc/blob/master/CONTRIBUTING.md)
 document to familiarize yourself with the development philosophy and find out how to
-set up the Bitcoin ABC repository.
+set up the Ergon ABC repository.
 
 The original Electrum ABC github repository is maintained as a mirror of the `electrum/`
 directory in the main repository.
@@ -22,7 +22,7 @@ with developers or to get help from the community.
 ## Installing dependencies
 
 All commands in this document assume that your current working directory is the
-`electrum/` directory that resides at the root of the Bitcoin ABC repository.
+`electrum/` directory that resides at the root of the Ergon ABC repository.
 
 ### Python
 
@@ -107,7 +107,7 @@ Running unit tests:
 python3 test_runner.py
 ```
 
-This can also be run as a `ninja` target in the context of a Bitcoin ABC build:
+This can also be run as a `ninja` target in the context of a Ergon ABC build:
 ```shell
 ninja check-electrum
 ```

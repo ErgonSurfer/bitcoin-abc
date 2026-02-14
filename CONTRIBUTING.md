@@ -1,16 +1,16 @@
-Contributing to Bitcoin ABC
+Contributing to Ergon ABC
 ===========================
 
-The Bitcoin ABC project welcomes contributors!
+The Ergon ABC project welcomes contributors!
 
-This guide is intended to help developers contribute effectively to Bitcoin ABC.
+This guide is intended to help developers contribute effectively to Ergon ABC.
 
 Communicating with Developers
 -----------------------------
 
-To get in contact with Bitcoin ABC developers, you can join the
+To get in contact with Ergon ABC developers, you can join the
 [eCash Development Telegram group](https://t.me/eCashDevelopment).
-The intent of this group is to facilitate development of Bitcoin ABC and other
+The intent of this group is to facilitate development of Ergon ABC and other
 eCash node implementations. We welcome people who wish to participate.
 
 Acceptable use of this group includes the following:
@@ -24,10 +24,10 @@ It is not for:
 * Market discussion
 * Non-constructive criticism
 
-Bitcoin ABC Development Philosophy
+Ergon ABC Development Philosophy
 ----------------------------------
 
-Bitcoin ABC aims for fast iteration and continuous integration.
+Ergon ABC aims for fast iteration and continuous integration.
 
 This means that there should be quick turnaround for patches to be proposed,
 reviewed, and committed. Changes should not sit in a queue for long.
@@ -59,10 +59,10 @@ quickly, it should be reverted, and re-applied later when it no longer breaks th
 top priority, more important than completing other tasks.
 - Automate as much as possible, and spend time on things only humans can do.
 
-Here are some handy links for development practices aligned with Bitcoin ABC:
+Here are some handy links for development practices aligned with Ergon ABC:
 
 - [Developer Notes](doc/developer-notes.md)
-- [Statement of Bitcoin ABC Values and Visions](https://archive.md/ulgFI)
+- [Statement of Ergon ABC Values and Visions](https://archive.md/ulgFI)
 - [How to Make Your Code Reviewer Fall in Love with You](https://mtlynch.io/code-review-love/)
 - [Large Diffs Are Hurting Your Ability To Ship](https://medium.com/@kurtisnusbaum/large-diffs-are-hurting-your-ability-to-ship-e0b2b41e8acf)
 - [Stacked Diffs: Keeping Phabricator Diffs Small](https://medium.com/@kurtisnusbaum/stacked-diffs-keeping-phabricator-diffs-small-d9964f4dcfa6)
@@ -80,7 +80,7 @@ Here are some handy links for development practices aligned with Bitcoin ABC:
 - [Semantic Compression](https://caseymuratori.com/blog_0015)
 - [Elon Musk's 5-Step Process](https://youtu.be/t705r8ICkRw?t=806)
 
-Getting set up with the Bitcoin ABC Repository
+Getting set up with the Ergon ABC Repository
 ----------------------------------------------
 
 1. Create an account at [reviews.bitcoinabc.org](https://reviews.bitcoinabc.org/)
@@ -133,7 +133,7 @@ Contributing to the node software
 ---------------------------------
 
 During submission of patches, arcanist will automatically run `arc lint` to
-enforce Bitcoin ABC code formatting standards, and often suggests changes.
+enforce Ergon ABC code formatting standards, and often suggests changes.
 If code formatting tools do not install automatically on your system, you
 will have to install the following:
 
@@ -207,7 +207,7 @@ Contributing to Electrum ABC
 
 See the dedicated [CONTRIBUTING.md](electrum/CONTRIBUTING.md) document.
 
-Working with The Bitcoin ABC Repository
+Working with The Ergon ABC Repository
 ---------------------------------------
 
 A typical workflow would be:
@@ -250,7 +250,7 @@ as the Diff number, reviewers, etc.).
 - When reviewers approve your Diff, it should be listed as "ready to Land"
 in Phabricator. When you want to commit your diff to the repository, check out
 type my-topic-branch in git, then type `arc land`. You have now successfully
-committed a change to the Bitcoin ABC repository.
+committed a change to the Ergon ABC repository.
 
 - When reviewing a Diff, apply the changeset on your local by using
 `arc patch D{NNNN}`

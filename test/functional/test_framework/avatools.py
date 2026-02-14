@@ -1,4 +1,4 @@
-# Copyright (c) 2021 The Bitcoin ABC developers
+# Copyright (c) 2021 The Ergon ABC developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Utilities for avalanche tests."""

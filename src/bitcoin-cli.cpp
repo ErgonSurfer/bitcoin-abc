@@ -60,6 +60,7 @@ static void SetupCliArgs(ArgsManager &argsman) {
     const auto defaultBaseParams = CreateBaseChainParams(ChainType::MAIN);
     const auto testnetBaseParams = CreateBaseChainParams(ChainType::TESTNET);
     const auto regtestBaseParams = CreateBaseChainParams(ChainType::REGTEST);
+    const auto ergonBaseParams = CreateBaseChainParams(ChainType::ERGON);
 
     SetupCurrencyUnitOptions(argsman);
     argsman.AddArg("-version", "Print version and exit", ArgsManager::ALLOW_ANY,
@@ -116,10 +117,11 @@ static void SetupCliArgs(ArgsManager &argsman) {
         ArgsManager::ALLOW_ANY, OptionsCategory::OPTIONS);
     argsman.AddArg("-rpcport=<port>",
                    strprintf("Connect to JSON-RPC on <port> (default: %u, "
-                             "testnet: %u, regtest: %u)",
+                             "testnet: %u, regtest: %u, ergon: %u)",
                              defaultBaseParams->RPCPort(),
                              testnetBaseParams->RPCPort(),
-                             regtestBaseParams->RPCPort()),
+                             regtestBaseParams->RPCPort(),
+                             ergonBaseParams->RPCPort()),
                    ArgsManager::ALLOW_ANY | ArgsManager::NETWORK_ONLY,
                    OptionsCategory::OPTIONS);
     argsman.AddArg("-rpcwait", "Wait for RPC server to start",
@@ -467,6 +469,8 @@ private:
                 return " testnet";
             case ChainType::REGTEST:
                 return " regtest";
+            case ChainType::ERGON:
+                return " ergon";
             default:
                 return "";
         }

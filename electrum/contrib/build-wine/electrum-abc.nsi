@@ -10,7 +10,7 @@
   !define PRODUCT_NAME "Electrum ABC"
   !define INTERNAL_NAME "ElectrumABC"
   !define PRODUCT_WEB_SITE "https://www.bitcoinabc.org/electrum/"
-  !define PRODUCT_PUBLISHER "Bitcoin ABC"
+  !define PRODUCT_PUBLISHER "Ergon ABC"
   !define INSTDIR_REG_ROOT "HKCU"
   !define INSTDIR_REG_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 

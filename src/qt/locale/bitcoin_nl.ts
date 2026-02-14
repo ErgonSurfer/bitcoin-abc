@@ -2870,8 +2870,8 @@
         <translation>Niet mogelijk ok HTTP-server te starten. Zie debuglogboek voor details.</translation>
     </message>
     <message>
-        <source>Bitcoin ABC</source>
-        <translation>Bitcoin ABC</translation>
+        <source>Ergon ABC</source>
+        <translation>Ergon ABC</translation>
     </message>
     <message>
         <source>The %s developers</source>

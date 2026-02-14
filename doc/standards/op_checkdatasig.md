@@ -188,9 +188,9 @@ References
 
 [3] [Low-S and Nullfail Specification](https://github.com/bitcoin/bips/blob/master/bip-0146.mediawiki)
 
-[4] [Bitcoin ABC implementation](https://reviews.bitcoinabc.org/D1621)
+[4] [Ergon ABC implementation](https://reviews.bitcoinabc.org/D1621)
 
-[5] [Bitcoin ABC implementation update](https://reviews.bitcoinabc.org/D1646)
+[5] [Ergon ABC implementation update](https://reviews.bitcoinabc.org/D1646)
 
 [6] [Andrew Stone’s OP_DATASIGVERIFY](https://github.com/BitcoinUnlimited/BitcoinUnlimited/blob/bucash1.3.0.0/doc/opdatasigverify.md)
 

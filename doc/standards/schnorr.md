@@ -211,7 +211,7 @@ Without a flag byte, however, implementors must take additional care in how sign
 
 # Implementation / unit tests
 
-The Bitcoin ABC implementation involved a number of Diffs: https://reviews.bitcoinabc.org/T527
+The Ergon ABC implementation involved a number of Diffs: https://reviews.bitcoinabc.org/T527
 
 Pieter Wuille's specification comes with a handy set of test vectors for checking cryptographic corner cases: https://github.com/sipa/bips/blob/bip-schnorr/bip-schnorr/test-vectors.csv
 

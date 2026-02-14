@@ -2346,7 +2346,7 @@
         <translation>Въведете Ваш публичен адрес</translation>
     </message>
     <message>
-        <source>Bitcoin ABC</source>
+        <source>Ergon ABC</source>
         <translation>Биткойн ядро</translation>
     </message>
     <message>

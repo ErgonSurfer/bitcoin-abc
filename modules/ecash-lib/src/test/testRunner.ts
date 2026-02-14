@@ -52,7 +52,7 @@ export class TestRunner {
             ],
             {
                 stdio: ['ipc'],
-                // Needs to be set dynamically and the Bitcoin ABC
+                // Needs to be set dynamically and the Ergon ABC
                 // node has to be built first.
                 cwd: process.env.BUILD_DIR || '.',
             },

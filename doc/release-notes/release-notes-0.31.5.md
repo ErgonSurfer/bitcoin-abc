@@ -1,6 +1,6 @@
-# Bitcoin ABC 0.31.5 Release Notes
+# Ergon ABC 0.31.5 Release Notes
 
-Bitcoin ABC version 0.31.5 is now available from:
+Ergon ABC version 0.31.5 is now available from:
 
   <https://download.bitcoinabc.org/0.31.5/>
 
@@ -47,4 +47,4 @@ Chronik enabled.
 Windows Support
 ---------------
 
-Starting with this version, running Bitcoin ABC is only supported on Windows 10 or later.
+Starting with this version, running Ergon ABC is only supported on Windows 10 or later.

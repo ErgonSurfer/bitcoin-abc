@@ -936,8 +936,8 @@
         <translation>Dirbti fone kaip šešėlyje ir priimti komandas</translation>
     </message>
     <message>
-        <source>Bitcoin ABC</source>
-        <translation>Bitcoin ABC</translation>
+        <source>Ergon ABC</source>
+        <translation>Ergon ABC</translation>
     </message>
     <message>
         <source>Error opening block database</source>

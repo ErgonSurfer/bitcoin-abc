@@ -183,7 +183,7 @@ public:
     }
 
     // This was added to have full compat with the std::vector interface but is
-    // unused (except in a Bitcoin ABC specific test in stream_tests)
+    // unused (except in a Ergon ABC specific test in stream_tests)
     void insert(iterator it, const value_type *first, const value_type *last) {
         if (last == first) {
             return;

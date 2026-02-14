@@ -40,14 +40,20 @@ template <typename T, typename C> rust::Vec<T> ToRustVec(const C &container) {
 }
 
 chronik_bridge::Net ParseNet(const ChainType chain_type) {
-    if (chain_type == ChainType::MAIN) {
-        return chronik_bridge::Net::Mainnet;
-    } else if (chain_type == ChainType::TESTNET) {
-        return chronik_bridge::Net::Testnet;
-    } else if (chain_type == ChainType::REGTEST) {
-        return chronik_bridge::Net::Regtest;
+    switch (chain_type) {
+        case ChainType::MAIN:
+        case ChainType::ERGON:
+            // Chronik bridge currently exposes only Mainnet/Testnet/Regtest.
+            // Ergon is a mainnet-like production chain for Chronik purposes.
+            return chronik_bridge::Net::Mainnet;
+        case ChainType::TESTNET:
+            return chronik_bridge::Net::Testnet;
+        case ChainType::REGTEST:
+            return chronik_bridge::Net::Regtest;
     }
-    throw std::runtime_error("Unknown chain type");
+    LogPrintf("Chronik: Unknown chain type enum %d, defaulting to Mainnet\n",
+              static_cast<int>(chain_type));
+    return chronik_bridge::Net::Mainnet;
 }
 
 util::Result<chronik_bridge::SetupParams>

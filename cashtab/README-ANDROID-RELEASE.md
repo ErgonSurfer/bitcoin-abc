@@ -25,7 +25,7 @@ You'll be prompted for:
 - **Key password**: Can be same as keystore password
 - **Your name**: Your name or organization
 - **Organizational Unit**: e.g., "Development"
-- **Organization**: e.g., "Bitcoin ABC"
+- **Organization**: e.g., "Ergon ABC"
 - **City**: Your city
 - **State**: Your state/province
 - **Country code**: e.g., "US"

@@ -43,7 +43,7 @@ function invalidAddress(res: Response, address: string, reason: string) {
     });
 }
 
-console.log(`*** Bitcoin ABC faucet ***`);
+console.log(`*** Ergon ABC faucet ***`);
 
 console.log('Loading configuration...');
 import { config } from './config';

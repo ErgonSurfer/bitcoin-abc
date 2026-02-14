@@ -1,13 +1,13 @@
-# Bitcoin ABC 0.21.9 Release Notes
+# Ergon ABC 0.21.9 Release Notes
 
-Bitcoin ABC version 0.21.9 is now available from:
+Ergon ABC version 0.21.9 is now available from:
 
   <https://download.bitcoinabc.org/0.21.9/>
 
 This release includes the following features and fixes:
 - Improve management of maxfee by the wallet.
 
-- The `-enablebip61` command line option (introduced in Bitcoin ABC 0.19.11) is
+- The `-enablebip61` command line option (introduced in Ergon ABC 0.19.11) is
 used to toggle sending of BIP 61 reject messages. Reject messages have no use
 case on the P2P network and are only logged for debugging by most network
 nodes. The option will now by default be off for improved privacy and security
@@ -34,7 +34,7 @@ use the former in coin selection.
 Rescanning the blockchain is required, to correctly mark previously
 used destinations.
 
-Together with "avoid partial spends" (present as of Bitcoin ABC v0.19.9), this
+Together with "avoid partial spends" (present as of Ergon ABC v0.19.9), this
 addresses a serious privacy issue where a malicious user can track spends by
 peppering a previously paid to address with near-dust outputs, which would then
 be inadvertently included in future payments.

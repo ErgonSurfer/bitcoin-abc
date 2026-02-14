@@ -254,16 +254,6 @@ export default function MiningContent() {
                       Kryptex
                     </a>
                   </li>
-                  <li>
-                    <a
-                      href="https://jackpool.org/#xec_sha256"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-400 transition-colors hover:text-blue-300"
-                    >
-                      Jackpool
-                    </a>
-                  </li>
                 </ul>
               </div>
             </div>
@@ -576,7 +566,7 @@ export default function MiningContent() {
                     >
                       solo mining software
                     </a>{" "}
-                    from Bitcoin ABC, make sure to update with the latest master
+                    from Ergon ABC, make sure to update with the latest master
                     that supports the new feature.
                   </span>
                 </li>

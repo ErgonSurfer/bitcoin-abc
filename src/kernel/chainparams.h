@@ -168,6 +168,8 @@ public:
     Main(const ChainOptions &options);
     static std::unique_ptr<const CChainParams>
     TestNet(const ChainOptions &options);
+    static std::unique_ptr<const CChainParams>
+    Ergon(const ChainOptions &options);
 
 protected:
     CChainParams() {}

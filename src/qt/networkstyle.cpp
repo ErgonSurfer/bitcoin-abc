@@ -20,6 +20,7 @@ static const struct {
     {ChainType::MAIN, QAPP_APP_NAME_DEFAULT, 0, 0},
     {ChainType::TESTNET, QAPP_APP_NAME_TESTNET, 70, 30},
     {ChainType::REGTEST, QAPP_APP_NAME_REGTEST, 160, 30},
+    {ChainType::ERGON, QAPP_APP_NAME_DEFAULT, 215, 20},
 };
 
 // titleAddText needs to be const char* for tr()

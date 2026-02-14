@@ -1,6 +1,6 @@
-# Bitcoin ABC 0.22.7 Release Notes
+# Ergon ABC 0.22.7 Release Notes
 
-Bitcoin ABC version 0.22.7 is now available from:
+Ergon ABC version 0.22.7 is now available from:
 
   <https://download.bitcoinabc.org/0.22.7/>
 

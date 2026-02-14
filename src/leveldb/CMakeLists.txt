@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file. See the AUTHORS file for names of contributors.
 
-# This version is adapted for Bitcoin ABC and is not the original version from
+# This version is adapted for Ergon ABC and is not the original version from
 # the leveldb project which is included as CMakeLists.txt.orig.
 # Major changes:
 # - Bumped cmake_minimum_required to 3.18

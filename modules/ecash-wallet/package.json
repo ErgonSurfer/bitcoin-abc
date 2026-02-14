@@ -1,6 +1,6 @@
 {
     "name": "ecash-wallet",
-    "version": "4.0.1",
+    "version": "4.0.0",
     "description": "An ecash wallet class. Manage keys, build and broadcast txs. Includes support for tokens and agora.",
     "main": "dist/index.js",
     "scripts": {
@@ -23,7 +23,7 @@
         "ALP",
         "tokens"
     ],
-    "author": "Bitcoin ABC",
+    "author": "Ergon ABC",
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/Bitcoin-ABC/bitcoin-abc/issues"

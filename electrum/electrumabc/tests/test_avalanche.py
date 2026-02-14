@@ -63,7 +63,7 @@ expected_limited_id1 = (
 )
 expected_proofid1 = "74c91491e5d6730ea1701817ed6c34e9627904fc3117647cc7d4bce73f56e45a"
 
-# data from Bitcoin ABC's proof_tests.cpp
+# data from Ergon ABC's proof_tests.cpp
 sequence2 = 5502932407561118921
 expiration2 = 5658701220890886376
 master2 = Key.from_wif("L4J6gEE4wL9ji2EQbzS5dPMTTsw8LRvcMst1Utij4e3X5ccUSdqW")
@@ -238,11 +238,11 @@ class TestAvalancheProofBuilder(unittest.TestCase):
             ProofId.from_hex(expected_proofid1),
         )
 
-        # A test similar to Bitcoin ABC's  "Properly signed 1 UTXO proof, P2PKH payout
+        # A test similar to Ergon ABC's  "Properly signed 1 UTXO proof, P2PKH payout
         # script" (proof_tests.cpp), except that I rebuild it with the node's
         # buildavalancheproof RPC to get the same signatures, as the test proof was
         # generated with a random nonce.
-        # RPC command used (Bitcoin ABC commit bdee6e2):
+        # RPC command used (Ergon ABC commit bdee6e2):
         #  src/bitcoin-cli buildavalancheproof 6296457553413371353 -4129334692075929194 "L4J6gEE4wL9ji2EQbzS5dPMTTsw8LRvcMst1Utij4e3X5ccUSdqW"  '[{"txid":"915d9cc742b46b77c52f69eb6be16739e5ff1cd82ad4fa4ac6581d3ef29fa769","vout":567214302,"amount":4446386380000.00,"height":1370779804,"iscoinbase":false,"privatekey":"KydYrKDNsVnY5uhpLyC4UmazuJvUjNoKJhEEv9f1mdK1D5zcnMSM"}]'  "ecash:qrupwtz3a7lngsf6xz9qxr75k9jvt07d3uexmwmpqy"
         # Proof ID and limited ID verified with node RPC decodeavalancheproof.
         self._test(
@@ -444,7 +444,7 @@ class TestAvalancheProofBuilder(unittest.TestCase):
     def test_payout_address_script(self):
         """Test that the proof builder generates the expected script for an address"""
 
-        # This script was generated using Bitcoin ABC's decodeavalancheproof RPC
+        # This script was generated using Ergon ABC's decodeavalancheproof RPC
         # on a proof build with the buildavalancheproof RPC using
         # ADDRESS_ECREG_UNSPENDABLE as the payout address
         payout_script_pubkey = bytes.fromhex(
@@ -646,7 +646,7 @@ class TestAvalancheDelegationBuilder(unittest.TestCase):
         )
 
     def test_from_ltd_id(self):
-        # This is based on the proof from the Bitcoin ABC test framework's unit test
+        # This is based on the proof from the Ergon ABC test framework's unit test
         # in messages.py:
         #     d97587e6c882615796011ec8f9a7b1c621023beefdde700a6bc02036335b4df141c8bc67bb
         #     05a971f5ac2745fd683797dde30169a79ff23e1d58c64afad42ad81cffe53967e16beb692f

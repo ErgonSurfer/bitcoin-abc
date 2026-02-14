@@ -2955,7 +2955,7 @@ bool AppInitMain(Config &config, RPCServer &rpcServer,
     const auto BadPortWarning = [](const char *prefix, uint16_t port) {
         return strprintf(_("%s request to listen on port %u. This port is "
                            "considered \"bad\" and "
-                           "thus it is unlikely that any Bitcoin ABC peers "
+                           "thus it is unlikely that any Ergon ABC peers "
                            "connect to it. See "
                            "doc/p2p-bad-ports.md for details and a full list."),
                          prefix, port);

@@ -2,7 +2,7 @@
 export LC_ALL=C
 set -e -o pipefail
 
-# Source the common prelude to check that we're at the top directory of the Bitcoin ABC repository
+# Source the common prelude to check that we're at the top directory of the Ergon ABC repository
 # shellcheck source=libexec/prelude.bash
 source "$(dirname "${BASH_SOURCE[0]}")/libexec/prelude.bash"
 

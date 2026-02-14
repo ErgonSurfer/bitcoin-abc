@@ -2200,7 +2200,7 @@ class Network(util.DaemonThread):
         # potential for a phishing exploit.
         # See: https://github.com/spesmilo/electrum/issues/4968
         # So.. these messages mostly come from groking the source code of BU and
-        # Bitcoin ABC. If that fails, a generic error string is returned.
+        # Ergon ABC. If that fails, a generic error string is returned.
         if not isinstance(server_msg, str):
             server_msg = str(server_msg)
         # replace \n with slash-n because dict does this.

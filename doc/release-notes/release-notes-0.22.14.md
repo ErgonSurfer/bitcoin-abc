@@ -1,6 +1,6 @@
-# Bitcoin ABC 0.22.14 Release Notes
+# Ergon ABC 0.22.14 Release Notes
 
-Bitcoin ABC version 0.22.14 is now available from:
+Ergon ABC version 0.22.14 is now available from:
 
   <https://download.bitcoinabc.org/0.22.14/>
 
@@ -16,7 +16,7 @@ This release includes the following features and fixes:
    `-listenonion` configuration parameter will now be created as a Tor v3 service
    instead of Tor v2. The private key that was used for Tor v2 (if any) will be
    left untouched in the `onion_private_key` file in the data directory (see
-   `-datadir`) and can be removed if not needed. Bitcoin ABC will no longer
+   `-datadir`) and can be removed if not needed. Ergon ABC will no longer
    attempt to read it. The private key for the Tor v3 service will be saved in a
    file named `onion_v3_private_key`. To use the deprecated Tor v2 service (not
    recommended), then `onion_private_key` can be copied over

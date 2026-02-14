@@ -14,7 +14,7 @@ import { themes as prismThemes } from 'prism-react-renderer';
 const config = {
     title: 'Chronik Documentation',
     tagline:
-        'Chronik is a fast and reliable indexer built into the Bitcoin ABC node software',
+        'Chronik is a fast and reliable indexer built into the Ergon ABC node software',
     favicon: 'img/favicon.png',
     trailingSlash: true,
 
@@ -24,8 +24,8 @@ const config = {
     // For GitHub pages deployment, it is often '/<projectName>/'
     baseUrl: '/docs/',
 
-    organizationName: 'Bitcoin ABC',
-    projectName: 'Bitcoin ABC',
+    organizationName: 'Ergon ABC',
+    projectName: 'Ergon ABC',
 
     onBrokenLinks: 'warn',
     onBrokenMarkdownLinks: 'warn',

@@ -1,8 +1,18 @@
-abc-ci-builds
+# ----------------------------
+# CI / project-specific
+# ----------------------------
+abc-ci-builds/
 
+# Archives / packages
 *.tar.gz
+*.zip
 
+# Windows binaries
 *.exe
+
+# ----------------------------
+# Built binaries (in-tree builds)
+# ----------------------------
 src/bitcoin
 src/bitcoind
 src/bitcoin-cli
@@ -14,100 +24,189 @@ src/test/test_bitcoin
 src/test/test_bitcoin_fuzzy
 src/qt/test/test_bitcoin-qt
 
-src/obj
+# Object/output folders (in-tree)
+src/obj/
 
+# Qt generated
 src/qt/*.moc
 src/qt/moc_*.cpp
 src/qt/forms/ui_*.h
-
 src/qt/test/moc*.cpp
 
+# Qt Creator
 src/qt/bitcoin-qt.config
 src/qt/bitcoin-qt.creator
 src/qt/bitcoin-qt.creator.user
 src/qt/bitcoin-qt.files
 src/qt/bitcoin-qt.includes
 
-.deps
-.libs
-.*.swp
-*.*~*
-*.bak
-*.rej
-*.orig
-*.pyc
+# Autotools/libtool
+.deps/
+.libs/
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache/
+config.log
+config.status
+configure
+depcomp
+install-sh
+missing
+ltmain.sh
+m4/
+*.la
+*.lo
+
+# Common build artifacts
 *.o
 *.o-*
 *.a
+*.so
+*.dylib
+*.dll
+*.exe
+
+# ----------------------------
+# Out-of-source builds (CMake/Ninja/etc.)
+# ----------------------------
+build/
+build-*/
+build.*/
+cmake-build-*/
+_build*/
+out*/
+dist*/
+bin*/
+lib*/
+obj*/
+
+# CMake / Ninja
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+*.ninja
+.ninja_deps
+.ninja_log
+CTestTestfile.cmake
+Testing/
+
+# ----------------------------
+# Generated sources / tooling
+# ----------------------------
 *.pb.cc
 *.pb.h
-
-*.log
-*.trs
-*.zip
-
-*.json.h
-*.raw.h
+qrc_*.cpp
+*.qm
 
 # Only ignore unexpected patches
 *.patch
 !depends/patches/**/*.patch
 !contrib/guix/**/*.patch
 
-# Compilation and Qt preprocessor part
-*.qm
-Makefile
-bitcoin-qt
-Bitcoin-Qt.app
+# ----------------------------
+# Logs / test outputs / coverage
+# ----------------------------
+*.log
+*.trs
 
-# Resources cpp
-qrc_*.cpp
-
-# Mac specific
-.DS_Store
-build
-
-#lcov
+# lcov / coverage
 *.gcno
 *.gcda
 /*.info
 
-#build tests
+# build tests
 test/config.ini
 test/cache/*
 *.mypy_cache/
 
+# ----------------------------
+# Temp / swap / backups
+# ----------------------------
+.*.swp
+*.*~*
+*.bak
+*.rej
+*.orig
+*.pyc
+*.tmp
+*~
+
+# ----------------------------
+# Misc generated headers
+# ----------------------------
+*.json.h
+*.raw.h
+
+# ----------------------------
+# GUI / app bundles
+# ----------------------------
+bitcoin-qt
+Bitcoin-Qt.app
+
+# ----------------------------
+# macOS / Windows
+# ----------------------------
+.DS_Store
+Thumbs.db
+
+# ----------------------------
+# Keep specific Makefiles tracked
+# ----------------------------
 !src/leveldb*/Makefile
 
+# ----------------------------
+# Repo scripts
+# ----------------------------
 contrib/devtools/split-debug.sh
 
-# JS artifacts at every level
+# ----------------------------
+# JS / TS artifacts (any level)
+# ----------------------------
 node_modules/
-build/
 .next/
 .docusaurus/
 .nyc_output/
 test-results.xml
 test_results/
-
-# compiled WebAssembly
-modules/ecash-lib/src/ffi/
+.netlify
 
 # Ignore secrets for JS/TS apps that use secret keys, e.g. databases or telegram bots
 secrets.js
 secrets.ts
 
-# Local Netlify folder
-.netlify
+# ----------------------------
+# Web / site
+# ----------------------------
+web/e.cash/public/rss.xml
 
-# arc liberate cache file
+# ----------------------------
+# WebAssembly compiled output
+# ----------------------------
+modules/ecash-lib/src/ffi/
+
+# ----------------------------
+# Phabricator / arc
+# ----------------------------
 .phutil_module_cache
 
+# ----------------------------
 # GUIX
+# ----------------------------
 /output/
 /var/
 /distsrc-*/
-web/e.cash/public/rss.xml
 
-# Cargo builds
+# ----------------------------
+# Rust / Cargo
+# ----------------------------
 target/
+
+# ----------------------------
+# IDEs
+# ----------------------------
+.vscode/
+.idea/
+*.code-workspace

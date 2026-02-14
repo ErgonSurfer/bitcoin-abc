@@ -1046,8 +1046,8 @@
         <translation>Izvršavaj u pozadini kao uslužnik i prihvaćaj komande</translation>
     </message>
     <message>
-        <source>Bitcoin ABC</source>
-        <translation>Bitcoin ABC</translation>
+        <source>Ergon ABC</source>
+        <translation>Ergon ABC</translation>
     </message>
     <message>
         <source>Block creation options:</source>

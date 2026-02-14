@@ -74,7 +74,7 @@ TYPE_PUBKEY = 1
 TYPE_SCRIPT = 2
 
 
-# Derived from Bitcoin ABC src/script/script.h
+# Derived from Ergon ABC src/script/script.h
 class OpCodes(IntEnum):
     # push value
     OP_0 = 0x00

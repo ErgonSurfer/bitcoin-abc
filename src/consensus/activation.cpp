@@ -114,6 +114,17 @@ bool IsCowperthwaiteEnabled(const Consensus::Params &params,
     return IsCowperthwaiteEnabled(params, pindexPrev->nHeight);
 }
 
+bool IsErgonEMAEnabled(const Consensus::Params &params,
+                       const CBlockIndex *pindexPrev) {
+    if (pindexPrev == nullptr) {
+        return false;
+    }
+
+    return pindexPrev->GetMedianTimePast() >=
+           gArgs.GetIntArg("-ergonemaactivationtime",
+                           params.emaDAAActivationTime);
+}
+
 bool IsObolenskyEnabled(const Consensus::Params &params,
                         int64_t nMedianTimePast) {
     return nMedianTimePast >= gArgs.GetIntArg("-obolenskyactivationtime",

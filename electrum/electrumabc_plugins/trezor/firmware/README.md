@@ -1,6 +1,6 @@
 # eCash Trezor firmware
 
-The firmwares in this folder have been built from [Bitcoin ABC ecash-trezor-firmware repository](https://github.com/Bitcoin-ABC/ecash-trezor-firmware).
+The firmwares in this folder have been built from [Ergon ABC ecash-trezor-firmware repository](https://github.com/Bitcoin-ABC/ecash-trezor-firmware).
 
 The build is deterministic when using docker.
 Select the version you want to build by using the tag `ecash/legacy_<version>` for the Trezor One or `ecash/<version>` for any other Trezor device.

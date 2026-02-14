@@ -1,6 +1,6 @@
-# Bitcoin ABC 0.19.2 Release Notes
+# Ergon ABC 0.19.2 Release Notes
 
-Bitcoin ABC version 0.19.2 is now available from:
+Ergon ABC version 0.19.2 is now available from:
 
   <https://download.bitcoinabc.org/0.19.2/>
 

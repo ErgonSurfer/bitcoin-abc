@@ -14,7 +14,7 @@
 //! - Serialize/deserialize proof data
 //!
 //! Based on the eCash Avalanche technical specification and the C++
-//! implementation in Bitcoin ABC.
+//! implementation in Ergon ABC.
 
 #![deny(unsafe_code)]
 

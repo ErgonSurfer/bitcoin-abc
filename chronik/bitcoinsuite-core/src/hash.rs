@@ -20,7 +20,7 @@ use crate::error::DataError;
 /// can't be mixed.
 ///
 /// It is designed to force making endianness explicit as much as possible, as
-/// the different protocols used with Bitcoin ABC use varying endianness:
+/// the different protocols used with Ergon ABC use varying endianness:
 /// - In the Bitcoin protocol:
 ///    - Byte order is little-endian
 ///    - Hex representation is big-endian

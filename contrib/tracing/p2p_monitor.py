@@ -3,7 +3,7 @@
 """Interactive bitcoind P2P network traffic monitor utilizing USDT and the
 net:inbound_message and net:outbound_message tracepoints."""
 
-# This script demonstrates what USDT for Bitcoin ABC can enable. It uses BCC
+# This script demonstrates what USDT for Ergon ABC can enable. It uses BCC
 # (https://github.com/iovisor/bcc) to load a sandboxed eBPF program into the
 # Linux kernel (root privileges are required). The eBPF program attaches to two
 # statically defined tracepoints. The tracepoint 'net:inbound_message' is called

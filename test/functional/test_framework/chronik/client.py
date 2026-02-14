@@ -206,7 +206,7 @@ class ChronikWs:
             kwargs={
                 "ping_interval": self.ping_interval,
                 "ping_timeout": self.ping_timeout,
-                "ping_payload": "Bitcoin ABC functional test framework",
+                "ping_payload": "Ergon ABC functional test framework",
             },
         )
         self.ws_thread.start()

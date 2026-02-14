@@ -26,18 +26,18 @@ interface BuildCategory {
 const buildCategories: BuildCategory[] = [
   {
     id: "contribute",
-    description: "Learn more about contributing to the Bitcoin ABC repository",
+    description: "Learn more about contributing to the Ergon ABC repository",
     items: [
       {
         name: "Contribution Guide",
         description:
-          "Learn more about contributing to the Bitcoin ABC repository",
+          "Learn more about contributing to the Ergon ABC repository",
         url: "https://github.com/Bitcoin-ABC/bitcoin-abc/blob/master/CONTRIBUTING.md",
       },
       {
         name: "Source Code",
         description:
-          "Source code for eCash software from Bitcoin ABC - including the full node, Electrum ABC wallet, and Cashtab wallet",
+          "Source code for eCash software from Ergon ABC - including the full node, Electrum ABC wallet, and Cashtab wallet",
         url: "https://github.com/Bitcoin-ABC/bitcoin-abc",
       },
     ],
@@ -47,14 +47,14 @@ const buildCategories: BuildCategory[] = [
     description: "Ready-to-run binaries and core software",
     items: [
       {
-        name: "Bitcoin ABC Releases",
-        description: "Ready-to-run binaries for the Bitcoin ABC full node",
+        name: "Ergon ABC Releases",
+        description: "Ready-to-run binaries for the Ergon ABC full node",
         url: "https://www.bitcoinabc.org/releases/",
       },
       {
         name: "Chronik Indexer",
         description:
-          "Chronik is a fast and reliable indexer built into the Bitcoin ABC node software",
+          "Chronik is a fast and reliable indexer built into the Ergon ABC node software",
         url: "https://chronik.e.cash/",
       },
     ],
@@ -123,8 +123,8 @@ const buildCategories: BuildCategory[] = [
     description: "Comprehensive guides and technical documentation",
     items: [
       {
-        name: "Bitcoin ABC",
-        description: "Documentation for the Bitcoin ABC full node software",
+        name: "Ergon ABC",
+        description: "Documentation for the Ergon ABC full node software",
         url: "https://www.bitcoinabc.org/doc/",
       },
       {

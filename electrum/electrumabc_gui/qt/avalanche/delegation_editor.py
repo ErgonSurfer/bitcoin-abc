@@ -170,7 +170,7 @@ class AvaDelegationWidget(CachedWalletPasswordWidget):
             return
         additional_info = (
             "Please save the private key. You will need it to use your delegation with "
-            "a Bitcoin ABC node."
+            "a Ergon ABC node."
         )
         d = AuxiliaryKeysDialog(self.wallet, self._pwd, self, additional_info)
         if not d.exec_() or not d.get_hex_public_key():

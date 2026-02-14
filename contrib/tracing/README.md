@@ -2,8 +2,8 @@ Example scripts for User-space, Statically Defined Tracing (USDT)
 =================================================================
 
 This directory contains scripts showcasing User-space, Statically Defined
-Tracing (USDT) support for Bitcoin ABC on Linux using. For more information on
-USDT support in Bitcoin ABC see the [USDT documentation].
+Tracing (USDT) support for Ergon ABC on Linux using. For more information on
+USDT support in Ergon ABC see the [USDT documentation].
 
 [USDT documentation]: ../../doc/tracing.md
 
@@ -34,10 +34,10 @@ The bpftrace examples contain a relative path to the `bitcoind` binary. By
 default, the scripts should be run from the repository-root and assume a
 self-compiled `bitcoind` binary. The paths in the examples can be changed, for
 example, to point to release builds if needed. See the
-[Bitcoin ABC USDT documentation] on how to list available tracepoints in your
+[Ergon ABC USDT documentation] on how to list available tracepoints in your
 `bitcoind` binary.
 
-[Bitcoin ABC USDT documentation]: ../../doc/tracing.md#listing-available-tracepoints
+[Ergon ABC USDT documentation]: ../../doc/tracing.md#listing-available-tracepoints
 
 **WARNING: eBPF programs require root privileges to be loaded into a Linux
 kernel VM. This means the bpftrace and BCC examples must be executed with root
@@ -184,7 +184,7 @@ longer than 25ms to connect.
 $ bpftrace contrib/tracing/connectblock_benchmark.bt 20000 38000 25
 ```
 
-In a different terminal, starting Bitcoin ABC in Testnet mode and with
+In a different terminal, starting Ergon ABC in Testnet mode and with
 re-indexing enabled.
 
 ```

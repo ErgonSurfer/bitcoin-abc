@@ -3,7 +3,7 @@
 pkgname=bitcoin-abc
 pkgver=0.32.8
 pkgrel=0
-pkgdesc="Bitcoin ABC with bitcoind, bitcoin-tx, bitcoin-seeder and bitcoin-cli"
+pkgdesc="Ergon ABC with bitcoind, bitcoin-tx, bitcoin-seeder and bitcoin-cli"
 arch=('i686' 'x86_64')
 url="https://bitcoinabc.org"
 depends=('boost-libs' 'libevent' 'openssl' 'zeromq' 'miniupnpc' 'libnatpmp' 'jemalloc')

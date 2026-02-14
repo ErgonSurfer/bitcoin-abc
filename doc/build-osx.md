@@ -26,19 +26,19 @@ Install dependencies:
 
 See [dependencies.md](dependencies.md) for a complete overview.
 
-Build Bitcoin ABC
+Build Ergon ABC
 -----------------
 
 Before you start building, please make sure that your compiler supports C++20.
 
-1. Clone the Bitcoin ABC source code and cd into `bitcoin-abc`
+1. Clone the Ergon ABC source code and cd into `bitcoin-abc`
 
         git clone https://github.com/Bitcoin-ABC/bitcoin-abc.git
         cd bitcoin-abc
 
-2.  Build Bitcoin ABC:
+2.  Build Ergon ABC:
 
-    Configure and build the headless Bitcoin ABC binaries as well as the GUI.
+    Configure and build the headless Ergon ABC binaries as well as the GUI.
 
     You can disable the GUI build by passing `-DBUILD_QT=OFF` to cmake.
 
@@ -59,7 +59,7 @@ Before you start building, please make sure that your compiler supports C++20.
 
 Disable-wallet mode
 --------------------
-When the intention is to run only a P2P node without a wallet, Bitcoin ABC may be compiled in
+When the intention is to run only a P2P node without a wallet, Ergon ABC may be compiled in
 disable-wallet mode with:
 
     cmake -GNinja .. -DBUILD_WALLET=OFF
@@ -69,7 +69,7 @@ Mining is also possible in disable-wallet mode using the `getblocktemplate` RPC 
 Running
 -------
 
-Bitcoin ABC is now available at `./src/bitcoind`
+Ergon ABC is now available at `./src/bitcoind`
 
 Before running, it's recommended that you create an RPC configuration file:
 

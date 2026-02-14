@@ -165,6 +165,7 @@ std::set<std::string> ArgsManager::GetUnsuitableSectionOnlyArgs() const {
 std::list<SectionInfo> ArgsManager::GetUnrecognizedSections() const {
     // Section names to be recognized in the config file.
     static const std::set<std::string> available_sections{
+        ChainTypeToString(ChainType::ERGON),
         ChainTypeToString(ChainType::REGTEST),
         ChainTypeToString(ChainType::TESTNET),
         ChainTypeToString(ChainType::MAIN),
@@ -791,11 +792,15 @@ std::variant<ChainType, std::string> ArgsManager::GetChainArg() const {
 
     const bool fRegTest = get_net("-regtest");
     const bool fTestNet = get_net("-testnet");
+    const bool fErgon = get_net("-ergon");
     const auto chain_arg = GetArg("-chain");
 
-    if (int(chain_arg.has_value()) + int(fRegTest) + int(fTestNet) > 1) {
-        throw std::runtime_error("Invalid combination of -regtest, -testnet "
-                                 "and -chain. Can use at most one.");
+    if (int(chain_arg.has_value()) + int(fRegTest) + int(fTestNet) +
+            int(fErgon) >
+        1) {
+        throw std::runtime_error(
+            "Invalid combination of -regtest, -testnet, -ergon and -chain. "
+            "Can use at most one.");
     }
     if (chain_arg) {
         if (auto parsed = ChainTypeFromString(*chain_arg)) {
@@ -809,6 +814,9 @@ std::variant<ChainType, std::string> ArgsManager::GetChainArg() const {
     }
     if (fTestNet) {
         return ChainType::TESTNET;
+    }
+    if (fErgon) {
+        return ChainType::ERGON;
     }
     return ChainType::MAIN;
 }

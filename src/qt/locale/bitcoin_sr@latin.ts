@@ -406,8 +406,8 @@
 <context>
     <name>bitcoin-abc</name>
     <message>
-        <source>Bitcoin ABC</source>
-        <translation>Bitcoin ABC</translation>
+        <source>Ergon ABC</source>
+        <translation>Ergon ABC</translation>
     </message>
     <message>
         <source>Information</source>

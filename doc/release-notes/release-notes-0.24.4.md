@@ -1,12 +1,12 @@
-# Bitcoin ABC 0.24.4 Release Notes
+# Ergon ABC 0.24.4 Release Notes
 
-Bitcoin ABC version 0.24.4 is now available from:
+Ergon ABC version 0.24.4 is now available from:
 
   <https://download.bitcoinabc.org/0.24.4/>
 
 This release includes the following features and fixes:
 
-- Bitcoin ABC will no longer create an unnamed `""` wallet by default when no wallet is
+- Ergon ABC will no longer create an unnamed `""` wallet by default when no wallet is
   specified on the command line or in the configuration files. For backwards compatibility,
   if an unnamed `""` wallet already exists and would have been loaded previously, then it
   will still be loaded. Users without an unnamed `""` wallet and without any other wallets
@@ -21,5 +21,5 @@ This release includes the following features and fixes:
   tracking.
 - The same ZeroMQ notification (e.g. `-zmqpubhashtx=address`) can now be specified multiple
   times to publish the same notification to different ZeroMQ sockets.
-- The `-startupnotify` option can be used to specify a command to execute when Bitcoin ABC
+- The `-startupnotify` option can be used to specify a command to execute when Ergon ABC
   has finished with its startup sequence.

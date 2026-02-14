@@ -20,7 +20,7 @@ function initializeTestRunner(testName: string, statusEvent: EventEmitter) {
         ],
         {
             stdio: ['ipc'],
-            // Needs to be set dynamically (by CI ?) and the Bitcoin ABC
+            // Needs to be set dynamically (by CI ?) and the Ergon ABC
             // node has to be built first.
             cwd: process.env.BUILD_DIR || '.',
         },

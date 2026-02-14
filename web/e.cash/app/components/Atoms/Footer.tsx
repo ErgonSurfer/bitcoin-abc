@@ -160,7 +160,7 @@ export default function Footer() {
           <div className="mt-12 flex flex-col-reverse items-center gap-8 py-12 lg:flex-row lg:justify-between">
             {/* Copyright */}
             <div className="text-secondaryText font-light opacity-50">
-              ©{new Date().getFullYear()} Bitcoin ABC. All rights reserved.
+              ©{new Date().getFullYear()} Ergon ABC. All rights reserved.
             </div>
 
             {/* Social Media Icons */}

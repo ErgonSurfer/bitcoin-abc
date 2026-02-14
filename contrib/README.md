@@ -23,7 +23,7 @@ Contains files used to package bitcoind/bitcoin-qt
 for Debian-based Linux systems. If you compile bitcoind/bitcoin-qt yourself, there are some useful files here.
 
 ### [Signing](/contrib/signing)
-PGP keys used for signing Bitcoin ABC [release](/doc/release-process.md) results.
+PGP keys used for signing Ergon ABC [release](/doc/release-process.md) results.
 
 ### [MacDeploy](/contrib/macdeploy) ###
 Scripts and notes for Mac builds.

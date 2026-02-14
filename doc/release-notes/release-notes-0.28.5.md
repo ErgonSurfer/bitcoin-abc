@@ -1,6 +1,6 @@
-# Bitcoin ABC 0.28.5 Release Notes
+# Ergon ABC 0.28.5 Release Notes
 
-Bitcoin ABC version 0.28.5 is now available from:
+Ergon ABC version 0.28.5 is now available from:
 
   <https://download.bitcoinabc.org/0.28.5/>
 
@@ -9,7 +9,7 @@ Updated settings
 
  - If the `-checkblocks` or `-checklevel` options are explicitly provided by the
    user, but the verification checks cannot be completed due to an insufficient
-   dbcache, Bitcoin ABC will now return an error at startup.
+   dbcache, Ergon ABC will now return an error at startup.
  - The `-maxavalancheoutbound` option now takes precedence over the
    `-maxconnections` option.
 

@@ -772,7 +772,7 @@
 </translation>
     </message>
     <message>
-        <source>Bitcoin ABC</source>
+        <source>Ergon ABC</source>
         <translation>bitcoin abc</translation>
     </message>
     <message>

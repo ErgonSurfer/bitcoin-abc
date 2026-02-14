@@ -20,7 +20,7 @@ except ImportError:
 class TestSchnorr(unittest.TestCase):
     def test_schnorr(self):
         """Test Schnorr implementation.
-        Duplicate the deterministic sig test from Bitcoin ABC's
+        Duplicate the deterministic sig test from Ergon ABC's
         src/test/key_tests.cpp"""
         private_key = bytes.fromhex(
             "12b004fff7f4b69ef8650e767f18f11ede158148b425660723b9f9a66e61f747"

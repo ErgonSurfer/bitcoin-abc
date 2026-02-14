@@ -66,8 +66,8 @@ function convertBitcoincashToEcash(bitcoincashAddress) {
 #### Change Log
 
 - 1.1.0 - Support decoding prefixless addresses\
-- 1.1.1 - Updated README to point to Bitcoin ABC monorepo\
-- 1.1.2 - Updated `repository` field in `package.json` to Bitcoin ABC monorepo\
+- 1.1.1 - Updated README to point to Ergon ABC monorepo\
+- 1.1.2 - Updated `repository` field in `package.json` to Ergon ABC monorepo\
 - 1.1.3 - Support string input and output for `hash`\
 - 1.2.0 - Support lowercase input and output of address types, support encoding outputScript to address, support getting type and hash from an outputScript with new exported function `getTypeAndHashFromOutputScript`\
 - 1.3.0 - Add `toLegacy` function to convert cashaddress format to legacy address\

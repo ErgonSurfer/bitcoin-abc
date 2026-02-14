@@ -16,7 +16,7 @@
  * for both bitcoind and bitcoin-qt, to make it harder for attackers to
  * target servers or GUI users specifically.
  */
-const std::string CLIENT_NAME("Bitcoin ABC");
+const std::string CLIENT_NAME("Ergon ABC");
 
 #ifdef HAVE_BUILD_INFO
 #include <obj/build.h>
@@ -29,7 +29,8 @@ const std::string CLIENT_NAME("Bitcoin ABC");
 #endif
 
 //! git will put "#define GIT_COMMIT_ID ..." on the next line inside archives.
-//! $Format:%n#define GIT_COMMIT_ID "%H"$
+//! 
+#define GIT_COMMIT_ID "38a7a4dc23a574f2747265fcdf33242648dd2ce1"
 
 #ifdef BUILD_GIT_TAG
 #define BUILD_DESC BUILD_GIT_TAG

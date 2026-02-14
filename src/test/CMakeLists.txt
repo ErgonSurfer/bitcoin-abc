@@ -306,7 +306,7 @@ function(add_boost_test_runners_with_upgrade_activated SUITE EXECUTABLE)
 			"--catch_system_errors=no"
 			--
 			"-printtoconsole=1"
-			"-testsuitename=Bitcoin ABC unit tests with next upgrade activated"
+			"-testsuitename=Ergon ABC unit tests with next upgrade activated"
 			# May. 16th, 2025 at 08:00:00
 			-obolenskyactivationtime=1747382400
 		)

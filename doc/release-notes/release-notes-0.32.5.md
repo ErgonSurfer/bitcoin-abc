@@ -1,6 +1,6 @@
-# Bitcoin ABC 0.32.5 Release Notes
+# Ergon ABC 0.32.5 Release Notes
 
-Bitcoin ABC version 0.32.5 is now available from:
+Ergon ABC version 0.32.5 is now available from:
 
   <https://download.bitcoinabc.org/0.32.5/>
 

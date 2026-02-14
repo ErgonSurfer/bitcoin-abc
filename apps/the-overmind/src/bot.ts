@@ -27,7 +27,6 @@ import {
     REGISTRATION_REWARD_SATS,
     BOTTLE_REPLY_AUTHOR_HP_LOSS_PER_BOTTLE,
     BOTTLE_REPLY_SENDER_HP_LOSS_PER_BOTTLE,
-    CHILI_REPLY_HP_AMOUNT,
 } from './constants';
 import { getOvermindEmpp, EmppAction } from './empp';
 import { hasWithdrawnInLast24Hours } from './chronik';
@@ -1370,7 +1369,7 @@ export const stats = async (
 /**
  * Handle messages in the monitored group chat
  * Stores messages in the database for reaction tracking
- * Also handles message replies: 🍼 and 🌶 in reply trigger HP flows (bottle: deductions to bot; chili: 10HP per 🌶 from reply sender to original author)
+ * Also handles message replies with 🍼 emoji for HP deductions
  * @param ctx - Grammy context from the message
  * @param pool - Database connection pool
  * @param monitoredGroupChatId - The monitored group chat ID
@@ -1429,10 +1428,10 @@ export const handleMessage = async (
             console.error(`Error storing message ${msgId} in database:`, err);
         }
 
-        // Check if this is a reply (for bottle and/or chili processing)
+        // Check if this is a reply and contains 🍼 emoji
         const replyToMessage = ctx.message.reply_to_message;
         if (replyToMessage && replyToMessage.message_id && senderId) {
-            // Count 🍼 and 🌶 emojis in the reply message text (up to 5 each)
+            // Count 🍼 emojis in the message text (up to 5)
             const bottleEmoji = '🍼';
             const bottleMatches = messageText.match(
                 new RegExp(
@@ -1444,21 +1443,37 @@ export const handleMessage = async (
                 ? Math.min(bottleMatches.length, 5)
                 : 0;
 
-            const originalMessageAuthorId = replyToMessage.from?.id ?? null;
+            if (bottleCount <= 0) {
+                return;
+            }
 
-            // Count 🌶 emojis in the reply message (up to 5)
-            const chiliEmoji = '🌶';
-            const chiliMatches = messageText.match(
-                new RegExp(
-                    chiliEmoji.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
-                    'g',
-                ),
-            );
-            const chiliCount = chiliMatches
-                ? Math.min(chiliMatches.length, 5)
-                : 0;
+            // Get the original message author
+            let originalMessageAuthorId: number | null = null;
+            try {
+                const messageResult = await pool.query(
+                    'SELECT user_tg_id FROM messages WHERE msg_id = $1',
+                    [replyToMessage.message_id],
+                );
+                if (
+                    messageResult.rows.length > 0 &&
+                    messageResult.rows[0].user_tg_id
+                ) {
+                    const dbValue = messageResult.rows[0].user_tg_id;
+                    originalMessageAuthorId =
+                        typeof dbValue === 'number'
+                            ? dbValue
+                            : typeof dbValue === 'bigint'
+                              ? Number(dbValue)
+                              : parseInt(String(dbValue), 10);
+                }
+            } catch (err) {
+                console.error(
+                    `Error fetching original message author for ${replyToMessage.message_id}:`,
+                    err,
+                );
+            }
 
-            // Check if both users are registered (needed for bottle and/or chili)
+            // Check if both users are registered
             if (originalMessageAuthorId !== null) {
                 try {
                     const replySenderResult = await pool.query(
@@ -1474,53 +1489,35 @@ export const handleMessage = async (
                         replySenderResult.rows.length > 0 &&
                         authorResult.rows.length > 0
                     ) {
-                        if (bottleCount > 0) {
-                            await handleBottleReply(
-                                pool,
-                                masterNode,
-                                chronik,
-                                bot,
-                                adminChatId,
-                                botWalletAddress,
-                                senderId,
-                                originalMessageAuthorId,
-                                msgId,
-                                replyToMessage.message_id,
-                                bottleCount,
-                            );
-                        }
-                        if (chiliCount > 0) {
-                            await handleChiliReply(
-                                pool,
-                                masterNode,
-                                chronik,
-                                bot,
-                                adminChatId,
-                                senderId,
-                                originalMessageAuthorId,
-                                msgId,
-                                chiliCount,
-                            );
-                        }
+                        // Both users are registered, process the bottle reply
+                        await handleBottleReply(
+                            pool,
+                            masterNode,
+                            chronik,
+                            bot,
+                            adminChatId,
+                            botWalletAddress,
+                            senderId,
+                            originalMessageAuthorId,
+                            msgId,
+                            replyToMessage.message_id,
+                            bottleCount,
+                        );
                     } else {
-                        if (bottleCount > 0 || chiliCount > 0) {
-                            console.log(
-                                `User ${senderId} or ${originalMessageAuthorId} is not registered, skipping reply processing`,
-                            );
-                        }
+                        console.log(
+                            `User ${senderId} or ${originalMessageAuthorId} is not registered, skipping bottle reply processing`,
+                        );
                     }
                 } catch (err) {
                     console.error(
-                        'Error checking user registration for reply processing:',
+                        'Error checking user registration for bottle reply:',
                         err,
                     );
                 }
             } else {
-                if (bottleCount > 0 || chiliCount > 0) {
-                    console.log(
-                        `Original message author unknown (reply_to_message.from missing), skipping reply processing`,
-                    );
-                }
+                console.log(
+                    `Original message ${replyToMessage.message_id} not found in database, skipping bottle reply processing`,
+                );
             }
         }
     }
@@ -2323,189 +2320,6 @@ export const handleBottleReply = async (
             adminChatId,
             'handleBottleReply (reply sender sending HP)',
             replySenderUserId,
-            err,
-        );
-    }
-};
-
-/**
- * Handle sending 10HP per 🌶 from reply sender to original message author when the reply contains 🌶
- * Counts 🌶 in the reply message (up to 5 chilis = 50 HP max)
- * Assumes both users are registered (caller should verify this)
- * @param pool - Database connection pool
- * @param masterNode - Master HD node for deriving user wallets
- * @param chronik - Chronik client for blockchain operations
- * @param bot - Bot instance for sending admin notifications
- * @param adminChatId - Admin group chat ID for error notifications
- * @param replySenderUserId - Telegram user ID of the person who sent the reply
- * @param originalMessageAuthorUserId - Telegram user ID of the original message author
- * @param replyMsgId - Telegram message ID of the reply for EMPP data push
- * @param chiliCount - Number of 🌶 emojis in the reply message (capped at 5)
- */
-export const handleChiliReply = async (
-    pool: Pool,
-    masterNode: HdNode,
-    chronik: ChronikClient,
-    bot: Bot,
-    adminChatId: string,
-    replySenderUserId: number,
-    originalMessageAuthorUserId: number,
-    replyMsgId: number,
-    chiliCount: number,
-): Promise<void> => {
-    const cappedChiliCount = Math.min(chiliCount, 5);
-
-    const replySenderResult = await pool.query(
-        'SELECT hd_index FROM users WHERE user_tg_id = $1',
-        [replySenderUserId],
-    );
-    const authorResult = await pool.query(
-        'SELECT address FROM users WHERE user_tg_id = $1',
-        [originalMessageAuthorUserId],
-    );
-
-    if (replySenderResult.rows.length === 0 || authorResult.rows.length === 0) {
-        console.log(
-            `User ${replySenderUserId} or ${originalMessageAuthorUserId} is not registered`,
-        );
-        return;
-    }
-
-    const replySenderHdIndex = replySenderResult.rows[0].hd_index;
-    const authorAddress = authorResult.rows[0].address;
-
-    if (replySenderUserId === originalMessageAuthorUserId) {
-        return;
-    }
-
-    const replySenderNode = masterNode.derivePath(
-        `m/44'/1899'/${replySenderHdIndex}'/0/0`,
-    );
-    const replySenderSk = replySenderNode.seckey();
-    if (!replySenderSk) {
-        console.error(
-            `Failed to derive secret key for user ${replySenderUserId}`,
-        );
-        await sendErrorToAdmin(
-            bot,
-            adminChatId,
-            'handleChiliReply (deriving wallet)',
-            replySenderUserId,
-            new Error('Failed to derive secret key from HD index'),
-        );
-        return;
-    }
-    const replySenderWallet = Wallet.fromSk(replySenderSk, chronik);
-
-    try {
-        await replySenderWallet.sync();
-    } catch (err) {
-        console.error('Error syncing wallet for chili reply:', err);
-        await sendErrorToAdmin(
-            bot,
-            adminChatId,
-            'handleChiliReply (syncing wallet)',
-            replySenderUserId,
-            err,
-        );
-        return;
-    }
-
-    let replySenderBalance = 0n;
-    for (const utxo of replySenderWallet.utxos) {
-        if (
-            typeof utxo.token !== 'undefined' &&
-            utxo.token.tokenId === REWARDS_TOKEN_ID
-        ) {
-            replySenderBalance += utxo.token.atoms;
-        }
-    }
-
-    const maxChilisByBalance = Math.floor(
-        Number(replySenderBalance) / CHILI_REPLY_HP_AMOUNT,
-    );
-    const effectiveChiliCount = Math.min(cappedChiliCount, maxChilisByBalance);
-
-    if (effectiveChiliCount === 0) {
-        console.log(
-            `Reply sender ${replySenderUserId} has insufficient HP (${replySenderBalance}) for chili reply`,
-        );
-        return;
-    }
-
-    const chiliHpAmount = BigInt(effectiveChiliCount * CHILI_REPLY_HP_AMOUNT);
-
-    const chiliReplyEmppData = getOvermindEmpp(
-        EmppAction.CHILI_REPLY,
-        replyMsgId,
-    );
-
-    const tokenSendAction: payment.Action = {
-        outputs: [
-            { sats: 0n },
-            {
-                sats: DEFAULT_DUST_SATS,
-                script: Script.fromAddress(authorAddress),
-                tokenId: REWARDS_TOKEN_ID,
-                atoms: chiliHpAmount,
-            },
-        ],
-        tokenActions: [
-            {
-                type: 'SEND',
-                tokenId: REWARDS_TOKEN_ID,
-                tokenType: ALP_TOKEN_TYPE_STANDARD,
-            },
-            {
-                type: 'DATA',
-                data: chiliReplyEmppData,
-            },
-        ],
-    };
-
-    const resp = await replySenderWallet
-        .action(tokenSendAction)
-        .build()
-        .broadcast();
-
-    if (!resp.success || resp.broadcasted.length === 0) {
-        const errorMsg = `Failed to send ${chiliHpAmount}HP from reply sender to author. Response: ${JSON.stringify(resp)}`;
-        console.error(errorMsg);
-        await sendErrorToAdmin(
-            bot,
-            adminChatId,
-            'handleChiliReply (sending HP)',
-            replySenderUserId,
-            new Error(errorMsg),
-        );
-        return;
-    }
-
-    const txid = resp.broadcasted[0];
-    console.log(
-        `Reply sender ${replySenderUserId} sent ${chiliHpAmount}HP to original message author ${originalMessageAuthorUserId}. TX: ${txid}`,
-    );
-    try {
-        const usernames = getUsernamesOrId([
-            replySenderUserId,
-            originalMessageAuthorUserId,
-        ]);
-        const replySenderUsername =
-            usernames.get(replySenderUserId) || replySenderUserId.toString();
-        const authorUsername =
-            usernames.get(originalMessageAuthorUserId) ||
-            originalMessageAuthorUserId.toString();
-        await bot.api.sendMessage(
-            adminChatId,
-            `${escapeMarkdownUsername(replySenderUsername)} [sent ${chiliHpAmount}HP](https://explorer.e.cash/tx/${txid}) to ${escapeMarkdownUsername(authorUsername)} for chili reply 🌶`,
-            {
-                parse_mode: 'Markdown',
-                link_preview_options: { is_disabled: true },
-            },
-        );
-    } catch (err) {
-        console.error(
-            'Error sending chili reply notification to admin channel:',
             err,
         );
     }

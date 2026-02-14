@@ -3,7 +3,7 @@
 (Logo design by Alita Yin [ecash:qr6lws9uwmjkkaau4w956lugs9nlg9hudqs26lyxkv](https://explorer.e.cash/address/ecash:qr6lws9uwmjkkaau4w956lugs9nlg9hudqs26lyxkv))
 
 # Chronik
-Chronik is a fast and reliable indexer built directly into the Bitcoin ABC node.
+Chronik is a fast and reliable indexer built directly into the Ergon ABC node.
 
 This README is about how to run a bitcoind instance with Chronik enabled.
 - **If you want to know how to use `chronik-client` in your eCash apps**, go to [../modules/chronik-client/README.md].
@@ -53,7 +53,7 @@ Sometimes it is necessary to re-index only Chronik, e.g. if the database corrupt
 Note: Since the official release of Chronik, database upgrades for newer versions will be done automatically at startup, so you probably won't have to use this option too often.
 
 ### `-chronikperfstats`
-If you want to help Bitcoin ABC optimizing Chronik, you can provide this flag when resyncing the node. It collects some performance statistics in the `<datadir>/perf` folder, which will help us with development.
+If you want to help Ergon ABC optimizing Chronik, you can provide this flag when resyncing the node. It collects some performance statistics in the `<datadir>/perf` folder, which will help us with development.
 
 ### Using a reverse proxy
 Since Chronik uses WebSocket, and if you're using a reverse proxy like Nginx, you likely need to set a few Upgrade fields for the /ws endpoint.

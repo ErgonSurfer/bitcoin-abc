@@ -159,6 +159,8 @@ static CCheckpointData regTestCheckpointData = {
                                "36012afca590b1a11466e2206")},
     }};
 
+static CCheckpointData ergonCheckpointData = {.mapCheckpoints = {}};
+
 const CCheckpointData &CheckpointData(const ChainType chain) {
     switch (chain) {
         case ChainType::MAIN:
@@ -167,6 +169,8 @@ const CCheckpointData &CheckpointData(const ChainType chain) {
             return testNetCheckpointData;
         case ChainType::REGTEST:
             return regTestCheckpointData;
+        case ChainType::ERGON:
+            return ergonCheckpointData;
     }
     throw std::invalid_argument(
         strprintf("%s: Invalid ChainType value", __func__));

@@ -151,7 +151,7 @@ This is implementation defined, and for blocks, this might require sorting trans
 
 **If there are 32768 transaction inputs or more (whether ALP or not), fail verification and burn all tokens.**
 
-This is to prevent a theoretical integer overflow. Note that in practice this cannot happen, as a transaction with 32768 would exceed the 1MB transaction size (see `MAX_TX_SIZE` in src/consensus/consensus.h in Bitcoin ABC). However, we don’t want this spec to depend on external variables, so indexers should check this limit.
+This is to prevent a theoretical integer overflow. Note that in practice this cannot happen, as a transaction with 32768 would exceed the 1MB transaction size (see `MAX_TX_SIZE` in src/consensus/consensus.h in Ergon ABC). However, we don’t want this spec to depend on external variables, so indexers should check this limit.
 
 ### 3.3: Iterate sections and verify there are sufficient input tokens
 

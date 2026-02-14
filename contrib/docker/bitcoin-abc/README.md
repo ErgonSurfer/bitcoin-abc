@@ -1,4 +1,4 @@
-# Running the Bitcoin ABC node software inside a Docker container
+# Running the Ergon ABC node software inside a Docker container
 
 ## Building your Docker image
 

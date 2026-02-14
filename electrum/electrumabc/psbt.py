@@ -54,7 +54,7 @@ Where:
     See  BIP 0174.
 
 Additional documentation:
-  - psbt.h in the Bitcoin ABC node.
+  - psbt.h in the Ergon ABC node.
   - https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki
 
 This currently supports PSBT version 0.

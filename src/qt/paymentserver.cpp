@@ -121,8 +121,10 @@ static bool ipcCanParseLegacyURI(const QString &arg,
 // message()", but "QMessageBox::"!
 //
 void PaymentServer::ipcParseCommandLine(int argc, char *argv[]) {
-    std::array<const ChainType, 3> networks = {
-        {ChainType::MAIN, ChainType::TESTNET, ChainType::REGTEST}};
+    std::array<const ChainType, 4> networks = {{ChainType::MAIN,
+                                                ChainType::TESTNET,
+                                                ChainType::REGTEST,
+                                                ChainType::ERGON}};
 
     const ChainType *chosenNetwork = nullptr;
 

@@ -1,6 +1,6 @@
-[![Bitcoin ABC Logo](share/pixmaps/bitcoinabclogo.png "Bitcoin ABC")](https://www.bitcoinabc.org)
+[![Ergon ABC Logo](share/pixmaps/bitcoinabclogo.png "Ergon ABC")](https://www.bitcoinabc.org)
 
-The goal of Bitcoin ABC is to create sound money that is usable by everyone in
+The goal of Ergon ABC is to create sound money that is usable by everyone in
 the world. This is a civilization-changing technology which will dramatically
 increase human flourishing, freedom, and prosperity. The project aims to
 achieve this goal by implementing a series of optimizations and protocol
@@ -14,17 +14,17 @@ anyone, anywhere in the world. It uses peer-to-peer technology to operate with
 no central authority: managing transactions and issuing money are carried out
 collectively by the network. eCash is a descendant of Bitcoin.
 
-What is Bitcoin ABC?
+What is Ergon ABC?
 --------------------
 
-Bitcoin ABC is the name of open-source software which enables the use of
+Ergon ABC is the name of open-source software which enables the use of
 eCash. It is a fork of the [Bitcoin Core](https://bitcoincore.org)
 software project.
 
 License
 -------
 
-Bitcoin ABC is released under the terms of the MIT license. See
+Ergon ABC is released under the terms of the MIT license. See
 [COPYING](COPYING) for more information or see
 <https://opensource.org/licenses/MIT>.
 
@@ -33,9 +33,14 @@ Development Process
 
 This Github repository contains only source code of releases.
 
-Bitcoin ABC development takes place at [reviews.bitcoinabc.org](https://reviews.bitcoinabc.org/)
+Ergon ABC development takes place at [reviews.bitcoinabc.org](https://reviews.bitcoinabc.org/)
 
 If you would like to contribute, please read [CONTRIBUTING](CONTRIBUTING.md).
+
+Operations
+----------
+
+- Ergon node build/run command reference: [doc/ergon-node-commands.md](doc/ergon-node-commands.md)
 
 Disclosure Policy
 -----------------

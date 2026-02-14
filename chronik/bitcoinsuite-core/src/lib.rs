@@ -5,7 +5,7 @@
 //! Core primitives for dealing with Bitcoin-like chains.
 //!
 //! Note: This is a general purpose library, but has been optimized for the
-//! usage in Chronik, an indexer for Bitcoin ABC.
+//! usage in Chronik, an indexer for Ergon ABC.
 
 abc_rust_lint::lint! {
     pub mod address;

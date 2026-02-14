@@ -236,7 +236,7 @@ builds:
             src/bench/BitcoinABC_Bench.json: bench/BitcoinABC_Bench.json
         post_build: |
             "${TOPLEVEL}/contrib/teamcity/nanobench_json_to_teamcity_messages.py" \
-              "Bitcoin ABC Benchmark" \
+              "Ergon ABC Benchmark" \
               "${BUILD_DIR}/src/bench/BitcoinABC_Bench.json"
 
     build-bitcoinsuite-chronik-client:

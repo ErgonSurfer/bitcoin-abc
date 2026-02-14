@@ -108,7 +108,7 @@ EXPECTED_HOLDER_NAMES = [
     r"Satoshi Nakamoto\n",
     r"The Bitcoin Core developers\n",
     r"The Bitcoin developers\n",
-    r"The Bitcoin ABC developers\n",
+    r"The Ergon ABC developers\n",
     r"BitPay Inc\.\n",
     r"University of Illinois at Urbana-Champaign\.\n",
     r"Pieter Wuille\n",

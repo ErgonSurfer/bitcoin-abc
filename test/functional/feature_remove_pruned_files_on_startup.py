@@ -39,7 +39,7 @@ class FeatureRemovePrunedFilesOnStartupTest(BitcoinTestFramework):
         fd1 = os.fdopen(fo1)
         fd2 = os.fdopen(fo2)
         # Backport note: for Bitcoin Core a regtest block file contains about 250 blocks
-        # whereas for Bitcoin ABC it contains 346 blocks, so we need to prune more
+        # whereas for Ergon ABC it contains 346 blocks, so we need to prune more
         # blocks to remove blk00001.dat
         self.nodes[0].pruneblockchain(700)
 

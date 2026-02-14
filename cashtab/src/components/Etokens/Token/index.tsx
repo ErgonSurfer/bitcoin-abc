@@ -284,7 +284,6 @@ const Token: React.FC = () => {
     >(false);
     const [confirmationOfEtokenToBeBurnt, setConfirmationOfEtokenToBeBurnt] =
         useState<string>('');
-    const [isBurning, setIsBurning] = useState<boolean>(false);
     const [selectedCurrency, setSelectedCurrency] = useState<string>(
         appConfig.ticker,
     );
@@ -1228,8 +1227,6 @@ const Token: React.FC = () => {
 
         Event('SendToken.js', 'Burn eToken', tokenId as string);
 
-        setIsBurning(true);
-
         try {
             if (!ecashWallet) {
                 // We do not render the component with ecashWallet, so we do not expect this to happen
@@ -1297,8 +1294,6 @@ const Token: React.FC = () => {
             setShowConfirmBurnEtoken(false);
             setConfirmationOfEtokenToBeBurnt('');
             toast.error(`${e}`);
-        } finally {
-            setIsBurning(false);
         }
     }
 
@@ -2053,12 +2048,9 @@ const Token: React.FC = () => {
                             title={`Confirm ${tokenTicker} burn`}
                             description={`Burn ${formData.burnAmount} ${tokenTicker}?`}
                             handleOk={burn}
-                            handleCancel={() =>
-                                !isBurning && setShowConfirmBurnEtoken(false)
-                            }
+                            handleCancel={() => setShowConfirmBurnEtoken(false)}
                             showCancelButton
                             height={250}
-                            isConfirmLoading={isBurning}
                         >
                             <ModalInput
                                 placeholder={`Type "burn ${tokenTicker}" to confirm`}
